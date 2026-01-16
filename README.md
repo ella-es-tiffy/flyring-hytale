@@ -21,5 +21,18 @@ Craft the **Fly Ring** at a **Tinkering Bench**.
 2. Place the JAR file into your Hytale `mods` folder.
 3. Start the game and craft your ring!
 
+<<<<<<< HEAD
+=======
+## Changelog
+### v0.2.0
+- **Exploit Fix:** Added a background scheduler that verifies flight status every 2 seconds.
+- **Smart Tracking:** The mod now tracks if flight was granted by the ring, preventing it from revoking flight enabled by other commands (e.g., `/movement`).
+- **Forced Landing:** Enhanced revocation logic that forces the client to land immediately using network packets and server-side state overrides.
+- **Bugfixes:** Corrected issues where flight would persist after dropping the ring or during mid-air inventory changes.
+
+## Authors
+- **Antigravity & Tiffy**
+
+>>>>>>> 16cc12e ([v0.2.0][all][release-fix-exploits-and-compatibility])
 ---
-*Version 0.1*
+*Version 0.2.0*
