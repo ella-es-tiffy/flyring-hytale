@@ -1,0 +1,124 @@
+package com.tiffy.flyring;
+
+import com.hypixel.hytale.server.core.plugin.JavaPlugin;
+import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.entity.entities.player.movement.MovementManager;
+import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.protocol.MovementSettings;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.AbstractCommand;
+
+/**
+ * Tiffys FlyRing - Ermöglicht Fliegen, solange der Ring im Inventar ist.
+ */
+public class FlyRing extends JavaPlugin {
+
+    private static final String RING_ITEM_ID = "tiffy:fly_ring";
+
+    public FlyRing(JavaPluginInit init) {
+        super(init);
+    }
+
+    @Override
+    protected void setup() {
+        // Registriere das Event für Inventar-Änderungen
+        getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, this::onInventoryChange);
+        
+        // Registriere den /ti command
+        getCommandRegistry().registerCommand(new TiCommand());
+        
+        getLogger().atInfo().log("FlyRing Mod v1.0.0 initialisiert!");
+    }
+
+    private void onInventoryChange(LivingEntityInventoryChangeEvent event) {
+        // Prüfen, ob die Entity ein Spieler ist
+        if (event.getEntity() instanceof Player player) {
+            getLogger().atInfo().log("[DEBUG] Inventory changed for player");
+            updateFlightStatus(player);
+        }
+    }
+
+    private void updateFlightStatus(Player player) {
+        boolean hasRing = hasRingInInventory(player);
+        getLogger().atInfo().log("[DEBUG] hasRing = " + hasRing);
+        
+        try {
+            // Zugriff auf den MovementManager über PlayerRef (funktioniert in dieser Version)
+            MovementManager movement = player.getPlayerRef().getComponent(MovementManager.getComponentType());
+            getLogger().atInfo().log("[DEBUG] MovementManager = " + (movement != null ? "found" : "NULL"));
+            
+            if (movement != null) {
+                MovementSettings settings = movement.getSettings();
+                getLogger().atInfo().log("[DEBUG] MovementSettings = " + (settings != null ? "found" : "NULL"));
+                
+                if (settings != null) {
+                    getLogger().atInfo().log("[DEBUG] Current canFly = " + settings.canFly + ", should be = " + hasRing);
+                }
+                
+                // Null-Check für Settings (werden möglicherweise erst später initialisiert)
+                if (settings != null && settings.canFly != hasRing) {
+                    settings.canFly = hasRing;
+                    getLogger().atInfo().log("[DEBUG] Set canFly to " + hasRing);
+                    
+                    // Client informieren
+                    movement.applyDefaultSettings();
+                    
+                    // Einfache Textnachrichten ohne Farbcodes (Hytale unterstützt keine MC-Style §-Codes)
+                    if (hasRing) {
+                        player.sendMessage(com.hypixel.hytale.server.core.Message.raw("[FlyRing] Der FlyRing pulsiert... du fuehlst dich federleicht!"));
+                    } else {
+                        player.sendMessage(com.hypixel.hytale.server.core.Message.raw("[FlyRing] Die magische Kraft des Rings schwindet. Vorsicht!"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            getLogger().atSevere().log("Fehler beim Aktualisieren des Flugstatus: " + e.getMessage());
+        }
+    }
+
+    private boolean hasRingInInventory(Player player) {
+        Inventory inv = player.getInventory();
+        if (inv == null) return false;
+        
+        return checkContainerForItem(inv.getHotbar(), RING_ITEM_ID) || 
+               checkContainerForItem(inv.getStorage(), RING_ITEM_ID);
+    }
+
+    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container, String itemId) {
+        if (container == null) return false;
+        
+        for (short i = 0; i < container.getCapacity(); i++) {
+            ItemStack stack = container.getItemStack(i);
+            if (stack != null && !stack.isEmpty()) {
+                getLogger().atInfo().log("[DEBUG] Found item in slot " + i + ": " + stack.getItemId());
+                if (itemId.equals(stack.getItemId())) {
+                    getLogger().atInfo().log("[DEBUG] MATCH! Found " + itemId);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Inner class for the /ti command
+     */
+    private class TiCommand extends AbstractCommand {
+        public TiCommand() {
+            super("ti", "Shows FlyRing mod status");
+        }
+
+        @Override
+        protected java.util.concurrent.CompletableFuture<Void> execute(CommandContext context) {
+            context.sendMessage(com.hypixel.hytale.server.core.Message.raw("[Tiffys FlyRing] Mod Status: GELADEN"));
+            context.sendMessage(com.hypixel.hytale.server.core.Message.raw("Version: 1.0.0"));
+            context.sendMessage(com.hypixel.hytale.server.core.Message.raw("Item ID: " + RING_ITEM_ID));
+            context.sendMessage(com.hypixel.hytale.server.core.Message.raw("Command /ti funktioniert!"));
+            return java.util.concurrent.CompletableFuture.completedFuture(null);
+        }
+    }
+}
