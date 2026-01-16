@@ -21,8 +21,5 @@ Craft the **Fly Ring** at a **Tinkering Bench**.
 2. Place the JAR file into your Hytale `mods` folder.
 3. Start the game and craft your ring!
 
-## Authors
-- **Antigravity & Tiffy**
-
 ---
 *Version 0.1*
