@@ -23,7 +23,7 @@ Craft the **Fly Ring** at a **Tinkering Bench**.
 
 ## Changelog
 
-### v0.2.2
+### v0.2.1
 - **Fall Damage Immunity:** Ring wearers are now completely immune to fall damage
 - **Velocity-Based Detection:** Monitors Y-velocity to detect falling state before damage is calculated
 - **Real-Time Protection:** 50ms tick-based protection system that resets velocity and movement states
