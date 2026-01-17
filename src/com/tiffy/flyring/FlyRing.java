@@ -84,76 +84,53 @@ public class FlyRing extends JavaPlugin {
     private void protectRingWearersFromFallDamage() {
         try {
             for (Player player : onlinePlayers) {
-                if (player != null) {
-                    boolean hasRing = hasRingInInventory(player);
-                    String playerName = "Unknown";
+                if (player != null && hasRingInInventory(player)) {
                     try {
-                        playerName = player.getPlayerRef().getUsername();
-                    } catch (Exception e) {
-                    }
+                        // Get Velocity Component
+                        Velocity velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
+                        double yVelocity = 0;
+                        if (velComp != null) {
+                            yVelocity = velComp.getY();
+                        }
 
-                    if (hasRing) {
-                        try {
-                            // Get Velocity Component
-                            Velocity velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
-                            double yVelocity = 0;
-                            if (velComp != null) {
-                                yVelocity = velComp.getY();
+                        // Get Movement States
+                        MovementStatesComponent statesComp = player.getPlayerRef()
+                                .getComponent(MovementStatesComponent.getComponentType());
+                        boolean onGround = false;
+                        if (statesComp != null) {
+                            MovementStates states = statesComp.getMovementStates();
+                            if (states != null) {
+                                onGround = states.onGround;
                             }
+                        }
 
-                            // Get Movement States
-                            MovementStatesComponent statesComp = player.getPlayerRef()
-                                    .getComponent(MovementStatesComponent.getComponentType());
-                            boolean onGround = false;
-                            boolean falling = false;
+                        // Wenn Y-Velocity negativ (fallend) und nicht on ground, setze auf 0
+                        if (yVelocity < -0.5 && !onGround) {
+                            if (velComp != null) {
+                                velComp.setZero();
+                            }
                             if (statesComp != null) {
                                 MovementStates states = statesComp.getMovementStates();
                                 if (states != null) {
-                                    onGround = states.onGround;
-                                    falling = states.falling;
+                                    states.onGround = true;
+                                    states.falling = false;
+                                    statesComp.setMovementStates(states);
                                 }
                             }
-
-                            double fallDistance = player.getCurrentFallDistance();
-
-                            getLogger().atInfo().log("[FlyRing-Tick] " + playerName +
-                                    " | YVel: " + String.format("%.2f", yVelocity) +
-                                    " | FallDist: " + fallDistance +
-                                    " | OnGround: " + onGround +
-                                    " | Falling: " + falling);
-
-                            // Wenn Y-Velocity negativ (fallend) und nicht on ground, setze auf 0
-                            if (yVelocity < -0.5 && !onGround) {
-                                getLogger().atInfo().log("[FlyRing-Tick] " + playerName + " - Blocking fall! Velocity was " + yVelocity);
-                                // Versuche Velocity auf 0 zu setzen
-                                if (velComp != null) {
-                                    velComp.setZero();
-                                    getLogger().atInfo().log("[FlyRing-Tick] ZEROED velocity for " + playerName);
-                                }
-                                // Setze onGround auf true
-                                if (statesComp != null) {
-                                    MovementStates states = statesComp.getMovementStates();
-                                    if (states != null) {
-                                        states.onGround = true;
-                                        states.falling = false;
-                                        statesComp.setMovementStates(states);
-                                        getLogger().atInfo().log("[FlyRing-Tick] Set onGround=true for " + playerName);
-                                    }
-                                }
-                            }
-
-                            // Immer Fall Distance auf 0 setzen
-                            if (fallDistance > 0) {
-                                player.setCurrentFallDistance(0);
-                            }
-                        } catch (Exception e) {
-                            getLogger().atWarning().log("[FlyRing-Tick] Error for " + playerName + ": " + e.getClass().getSimpleName());
                         }
+
+                        // Immer Fall Distance auf 0 setzen
+                        double fallDistance = player.getCurrentFallDistance();
+                        if (fallDistance > 0) {
+                            player.setCurrentFallDistance(0);
+                        }
+                    } catch (Exception e) {
+                        // Silently ignore errors
                     }
                 }
             }
         } catch (Exception e) {
-            getLogger().atSevere().log("Error in protectRingWearersFromFallDamage: " + e.getMessage());
+            // Silently ignore errors
         }
     }
 
