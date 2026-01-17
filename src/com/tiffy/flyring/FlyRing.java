@@ -15,25 +15,26 @@ import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Tiffys FlyRing - Ermöglicht Fliegen, solange der Ring im Inventar ist.
+ * FlyRing - Ermöglicht Fliegen, solange der Ring im Inventar ist.
  */
 public class FlyRing extends JavaPlugin {
 
     private static final String RING_ITEM_ID = "Jewelry_Fly_Ring";
-    
-    // Player tracking for periodic checks
+
+    // Player tracking
     private final Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
     private final Set<UUID> trackedFlightPlayers = ConcurrentHashMap.newKeySet();
-    private Timer flightCheckTimer;
+    private ScheduledExecutorService scheduler;
 
     public FlyRing(JavaPluginInit init) {
         super(init);
@@ -45,23 +46,19 @@ public class FlyRing extends JavaPlugin {
         getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, this::onInventoryChange);
         getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
-        
-        // Start Security Scheduler (Check every 2 seconds)
-        flightCheckTimer = new Timer("FlyRingCheckTimer", true);
-        flightCheckTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                checkAllPlayers();
-            }
-        }, 2000, 2000);
 
-        getLogger().atInfo().log("FlyRing Mod v0.2.0 initialisiert (mit Scheduler & Hammer)!");
+        // Tick-basierter Fallschaden-Schutz für Ring-Träger
+        scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 50, TimeUnit.MILLISECONDS);
+
+        getLogger().atInfo().log("FlyRing Mod v0.2.1 initialisiert (Event-driven)!");
     }
 
     @Override
     protected void shutdown() {
-        if (flightCheckTimer != null) {
-            flightCheckTimer.cancel();
+        // Cleanup scheduler
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
         }
     }
 
@@ -77,40 +74,109 @@ public class FlyRing extends JavaPlugin {
         trackedFlightPlayers.remove(uuid);
     }
 
-    private void checkAllPlayers() {
-        for (Player player : onlinePlayers) {
-            try {
-                updateFlightStatus(player);
-            } catch (Exception e) {
-                // Ignore single player errors
-            }
-        }
-    }
-
     private void onInventoryChange(LivingEntityInventoryChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
             onlinePlayers.add(player); // Ensure they are tracked
             updateFlightStatus(player);
         }
     }
-    
+
+    private void protectRingWearersFromFallDamage() {
+        try {
+            for (Player player : onlinePlayers) {
+                if (player != null) {
+                    boolean hasRing = hasRingInInventory(player);
+                    String playerName = "Unknown";
+                    try {
+                        playerName = player.getPlayerRef().getUsername();
+                    } catch (Exception e) {
+                    }
+
+                    if (hasRing) {
+                        try {
+                            // Get Velocity Component
+                            Velocity velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
+                            double yVelocity = 0;
+                            if (velComp != null) {
+                                yVelocity = velComp.getY();
+                            }
+
+                            // Get Movement States
+                            MovementStatesComponent statesComp = player.getPlayerRef()
+                                    .getComponent(MovementStatesComponent.getComponentType());
+                            boolean onGround = false;
+                            boolean falling = false;
+                            if (statesComp != null) {
+                                MovementStates states = statesComp.getMovementStates();
+                                if (states != null) {
+                                    onGround = states.onGround;
+                                    falling = states.falling;
+                                }
+                            }
+
+                            double fallDistance = player.getCurrentFallDistance();
+
+                            getLogger().atInfo().log("[FlyRing-Tick] " + playerName +
+                                    " | YVel: " + String.format("%.2f", yVelocity) +
+                                    " | FallDist: " + fallDistance +
+                                    " | OnGround: " + onGround +
+                                    " | Falling: " + falling);
+
+                            // Wenn Y-Velocity negativ (fallend) und nicht on ground, setze auf 0
+                            if (yVelocity < -0.5 && !onGround) {
+                                getLogger().atInfo().log("[FlyRing-Tick] " + playerName + " - Blocking fall! Velocity was " + yVelocity);
+                                // Versuche Velocity auf 0 zu setzen
+                                if (velComp != null) {
+                                    velComp.setZero();
+                                    getLogger().atInfo().log("[FlyRing-Tick] ZEROED velocity for " + playerName);
+                                }
+                                // Setze onGround auf true
+                                if (statesComp != null) {
+                                    MovementStates states = statesComp.getMovementStates();
+                                    if (states != null) {
+                                        states.onGround = true;
+                                        states.falling = false;
+                                        statesComp.setMovementStates(states);
+                                        getLogger().atInfo().log("[FlyRing-Tick] Set onGround=true for " + playerName);
+                                    }
+                                }
+                            }
+
+                            // Immer Fall Distance auf 0 setzen
+                            if (fallDistance > 0) {
+                                player.setCurrentFallDistance(0);
+                            }
+                        } catch (Exception e) {
+                            getLogger().atWarning().log("[FlyRing-Tick] Error for " + playerName + ": " + e.getClass().getSimpleName());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            getLogger().atSevere().log("Error in protectRingWearersFromFallDamage: " + e.getMessage());
+        }
+    }
+
     private void updateFlightStatus(Player player) {
-        if (player == null) return;
-        
+        if (player == null)
+            return;
+
         boolean hasRing = hasRingInInventory(player);
         UUID uuid = player.getPlayerRef().getUuid();
         String playerName = player.getPlayerRef().getUsername();
-        
+
         // Auto-track for scheduler
         onlinePlayers.add(player);
-        
+
         try {
             MovementManager movement = player.getPlayerRef().getComponent(MovementManager.getComponentType());
-            if (movement == null) return;
-            
+            if (movement == null)
+                return;
+
             MovementSettings settings = movement.getSettings();
-            if (settings == null) return;
-            
+            if (settings == null)
+                return;
+
             boolean canFly = settings.canFly;
 
             if (hasRing) {
@@ -118,7 +184,8 @@ public class FlyRing extends JavaPlugin {
                 if (!canFly) {
                     settings.canFly = true;
                     movement.update(player.getPlayerRef().getPacketHandler());
-                    player.sendMessage(com.hypixel.hytale.server.core.Message.raw("[FlyRing] The FlyRing pulsates... you feel as light as a feather!"));
+                    player.sendMessage(com.hypixel.hytale.server.core.Message
+                            .raw("[FlyRing] The FlyRing pulsates... you feel as light as a feather!"));
                 }
                 // Wir merken uns, dass wir (der Ring) diesen Spieler fliegen lassen
                 trackedFlightPlayers.add(uuid);
@@ -127,35 +194,42 @@ public class FlyRing extends JavaPlugin {
                 if (canFly && trackedFlightPlayers.contains(uuid)) {
                     // Er fliegt, und WIR haben es ihm erlaubt -> Jetzt Ring weg, also abstürzen
                     getLogger().atInfo().log("Revoking flight for " + playerName + " (Ring lost)");
-                    
+
                     // 1. Reset Settings
                     movement.applyDefaultSettings();
                     settings = movement.getSettings();
-                    if (settings != null) settings.canFly = false;
+                    if (settings != null)
+                        settings.canFly = false;
                     movement.update(player.getPlayerRef().getPacketHandler());
 
                     // 2. Force Landing Packet
                     try {
-                        player.getPlayerRef().getPacketHandler().write(new SetMovementStates(new SavedMovementStates(false)));
-                    } catch (Exception ex) {}
+                        player.getPlayerRef().getPacketHandler()
+                                .write(new SetMovementStates(new SavedMovementStates(false)));
+                    } catch (Exception ex) {
+                    }
 
                     // 3. Kill Server State
                     try {
-                        MovementStatesComponent statesComp = player.getPlayerRef().getComponent(MovementStatesComponent.getComponentType());
+                        MovementStatesComponent statesComp = player.getPlayerRef()
+                                .getComponent(MovementStatesComponent.getComponentType());
                         if (statesComp != null) {
                             MovementStates states = statesComp.getMovementStates();
                             if (states != null) {
                                 states.flying = false;
-                                states.falling = true;
+                                // Nicht auf 'falling = true' setzen, um Fallschaden zu vermeiden
                                 statesComp.setMovementStates(states);
                             }
                         }
-                    } catch (Exception ex) {}
-                    
-                    player.sendMessage(com.hypixel.hytale.server.core.Message.raw("[FlyRing] The ring's magic fades. Be careful!"));
+                    } catch (Exception ex) {
+                    }
+
+                    player.sendMessage(com.hypixel.hytale.server.core.Message
+                            .raw("[FlyRing] The ring's magic fades. Be careful!"));
                 }
-                
-                // Wir tracken ihn nicht mehr (entweder gerade gelandet oder er fliegt fremd-gesteuert)
+
+                // Wir tracken ihn nicht mehr (entweder gerade gelandet oder er fliegt
+                // fremd-gesteuert)
                 trackedFlightPlayers.remove(uuid);
             }
         } catch (Exception e) {
@@ -165,15 +239,18 @@ public class FlyRing extends JavaPlugin {
 
     private boolean hasRingInInventory(Player player) {
         Inventory inv = player.getInventory();
-        if (inv == null) return false;
-        
-        return checkContainerForItem(inv.getHotbar(), RING_ITEM_ID) || 
-               checkContainerForItem(inv.getStorage(), RING_ITEM_ID);
+        if (inv == null)
+            return false;
+
+        return checkContainerForItem(inv.getHotbar(), RING_ITEM_ID) ||
+                checkContainerForItem(inv.getStorage(), RING_ITEM_ID);
     }
 
-    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container, String itemId) {
-        if (container == null) return false;
-        
+    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container,
+            String itemId) {
+        if (container == null)
+            return false;
+
         for (short i = 0; i < container.getCapacity(); i++) {
             ItemStack stack = container.getItemStack(i);
             if (stack != null && !stack.isEmpty()) {
