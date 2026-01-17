@@ -86,16 +86,28 @@ public class FlyRing extends JavaPlugin {
             for (Player player : onlinePlayers) {
                 if (player != null && hasRingInInventory(player)) {
                     try {
-                        // Get Velocity Component
-                        Velocity velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
+                        // Get Velocity Component (may fail if called async)
+                        Velocity velComp = null;
+                        try {
+                            velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
+                        } catch (Exception ignored) {
+                            // Async access not allowed, skip this tick
+                        }
+
                         double yVelocity = 0;
                         if (velComp != null) {
                             yVelocity = velComp.getY();
                         }
 
-                        // Get Movement States
-                        MovementStatesComponent statesComp = player.getPlayerRef()
-                                .getComponent(MovementStatesComponent.getComponentType());
+                        // Get Movement States (may fail if called async)
+                        MovementStatesComponent statesComp = null;
+                        try {
+                            statesComp = player.getPlayerRef()
+                                    .getComponent(MovementStatesComponent.getComponentType());
+                        } catch (Exception ignored) {
+                            // Async access not allowed, skip this tick
+                        }
+
                         boolean onGround = false;
                         if (statesComp != null) {
                             MovementStates states = statesComp.getMovementStates();
@@ -125,12 +137,12 @@ public class FlyRing extends JavaPlugin {
                             player.setCurrentFallDistance(0);
                         }
                     } catch (Exception e) {
-                        // Silently ignore errors
+                        // Silently ignore unexpected errors
                     }
                 }
             }
         } catch (Exception e) {
-            // Silently ignore errors
+            // Silently ignore unexpected errors
         }
     }
 
