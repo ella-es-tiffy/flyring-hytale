@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.universe.world.World;
 
 import java.util.Set;
 import java.util.UUID;
@@ -47,16 +48,15 @@ public class FlyRing extends JavaPlugin {
         getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
 
-        // Tick-basierter Fallschaden-Schutz für Ring-Träger
+        // Fall damage protection (500ms interval to minimize spam)
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 50, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 500, TimeUnit.MILLISECONDS);
 
-        getLogger().atInfo().log("FlyRing Mod v0.2.1 initialisiert (Event-driven)!");
+        getLogger().atInfo().log("FlyRing Mod v0.2.3 initialisiert (Event-driven + Fall Protection)!");
     }
 
     @Override
     protected void shutdown() {
-        // Cleanup scheduler
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
@@ -82,32 +82,29 @@ public class FlyRing extends JavaPlugin {
     }
 
     private void protectRingWearersFromFallDamage() {
-        try {
-            for (Player player : onlinePlayers) {
-                if (player != null && hasRingInInventory(player)) {
+        for (Player player : onlinePlayers) {
+            try {
+                if (player == null || player.wasRemoved()) {
+                    onlinePlayers.remove(player);
+                    continue;
+                }
+
+                World world = player.getWorld();
+                if (world == null || !world.isAlive())
+                    continue;
+
+                // Führe die Logik im Haupt-Thread der Welt aus, um "async call"-Fehler zu
+                // vermeiden
+                world.execute(() -> {
                     try {
-                        // Get Velocity Component (may fail if called async)
-                        Velocity velComp = null;
-                        try {
-                            velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
-                        } catch (Exception ignored) {
-                            // Async access not allowed, skip this tick
-                        }
+                        if (!hasRingInInventory(player))
+                            return;
 
-                        double yVelocity = 0;
-                        if (velComp != null) {
-                            yVelocity = velComp.getY();
-                        }
+                        Velocity velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
+                        double yVelocity = (velComp != null) ? velComp.getY() : 0;
 
-                        // Get Movement States (may fail if called async)
-                        MovementStatesComponent statesComp = null;
-                        try {
-                            statesComp = player.getPlayerRef()
-                                    .getComponent(MovementStatesComponent.getComponentType());
-                        } catch (Exception ignored) {
-                            // Async access not allowed, skip this tick
-                        }
-
+                        MovementStatesComponent statesComp = player.getPlayerRef()
+                                .getComponent(MovementStatesComponent.getComponentType());
                         boolean onGround = false;
                         if (statesComp != null) {
                             MovementStates states = statesComp.getMovementStates();
@@ -116,7 +113,7 @@ public class FlyRing extends JavaPlugin {
                             }
                         }
 
-                        // Wenn Y-Velocity negativ (fallend) und nicht on ground, setze auf 0
+                        // Block fall damage
                         if (yVelocity < -0.5 && !onGround) {
                             if (velComp != null) {
                                 velComp.setZero();
@@ -131,18 +128,17 @@ public class FlyRing extends JavaPlugin {
                             }
                         }
 
-                        // Immer Fall Distance auf 0 setzen
                         double fallDistance = player.getCurrentFallDistance();
                         if (fallDistance > 0) {
                             player.setCurrentFallDistance(0);
                         }
-                    } catch (Exception e) {
-                        // Silently ignore unexpected errors
+                    } catch (Exception inner) {
+                        // Silent skip
                     }
-                }
+                });
+            } catch (Exception e) {
+                // Silently skip if world access fails
             }
-        } catch (Exception e) {
-            // Silently ignore unexpected errors
         }
     }
 
@@ -198,7 +194,7 @@ public class FlyRing extends JavaPlugin {
                     } catch (Exception ex) {
                     }
 
-                    // 3. Kill Server State
+                    // 3. Kill Server State & Prevent Fall Damage
                     try {
                         MovementStatesComponent statesComp = player.getPlayerRef()
                                 .getComponent(MovementStatesComponent.getComponentType());
@@ -206,10 +202,14 @@ public class FlyRing extends JavaPlugin {
                             MovementStates states = statesComp.getMovementStates();
                             if (states != null) {
                                 states.flying = false;
-                                // Nicht auf 'falling = true' setzen, um Fallschaden zu vermeiden
+                                // Setze onGround auf true um Fallschaden zu verhindern
+                                states.onGround = true;
+                                states.falling = false;
                                 statesComp.setMovementStates(states);
                             }
                         }
+                        // Reset fall distance
+                        player.setCurrentFallDistance(0);
                     } catch (Exception ex) {
                     }
 

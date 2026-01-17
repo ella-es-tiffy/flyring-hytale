@@ -23,7 +23,13 @@ Craft the **Fly Ring** at a **Tinkering Bench**.
 
 ## Changelog
 
-### v0.2.1
+### v0.2.4
+- **Critical Fix: Main Thread Synchronization:** Resolved `java.lang.NoClassDefFoundError` and `PlayerRef.getComponent(Velocity) called async` errors by properly scheduling component access on the Hytale World thread.
+- **Improved Game Loop Integration:** Logic now executes via `world.execute()` to ensure safe interactions with internal server components.
+- **Resource Management:** Added proactive tracking cleanup and player validity checks using `wasRemoved()` to prevent memory leaks and redundant processing.
+- **Code Quality:** Refactored package imports for better visibility and simplified code structure.
+
+### v0.2.2
 - **Fall Damage Immunity:** Ring wearers are now completely immune to fall damage
 - **Velocity-Based Detection:** Monitors Y-velocity to detect falling state before damage is calculated
 - **Real-Time Protection:** 50ms tick-based protection system that resets velocity and movement states
@@ -37,4 +43,4 @@ Craft the **Fly Ring** at a **Tinkering Bench**.
 - **Bugfixes:** Corrected issues where flight would persist after dropping the ring or during mid-air inventory changes.
 
 ---
-*Version 0.2.2*
+*Version 0.2.4*
