@@ -1,0 +1,25 @@
+{
+  "OverlapBehavior": "Overwrite",
+  "Infinite": true,
+  "ApplicationEffects": {
+    "EntityBottomTint": "#ff3300"
+  },
+  "Name": "Fire Ring Protection",
+  "DamageResistance": {
+    "Fire": [
+      {
+        "Target": "Max",
+        "CalculationType": "Multiplicative",
+        "Amount": 1
+      }
+    ],
+    "lava": [
+      {
+        "Target": "Max",
+        "CalculationType": "Multiplicative",
+        "Amount": 1
+      }
+    ]
+  },
+  "StatusEffectIcon": "Icons/ItemsGenerated/Jewelry_Fire_Ring.png"
+}

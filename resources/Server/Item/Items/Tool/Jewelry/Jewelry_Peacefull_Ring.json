@@ -1,0 +1,57 @@
+{
+    "TranslationProperties": {
+        "Name": "items.Jewelry_Peacefull_Ring.name",
+        "Description": "items.Jewelry_Peacefull_Ring.description"
+    },
+    "Categories": [
+        "Tool.Misc"
+    ],
+    "Icon": "Icons/ItemsGenerated/Jewelry_Peacefull_Ring.png",
+    "IconProperties": {
+        "Scale": 0.55,
+        "Rotation": [
+            22.5,
+            45,
+            22.5
+        ],
+        "Translation": [
+            0,
+            -4
+        ]
+    },
+    "Rarity": "Epic",
+    "Tags": {
+        "Type": [
+            "Tool"
+        ]
+    },
+    "Recipe": {
+        "Input": [
+            {
+                "ItemId": "Ingredient_Bar_Iron",
+                "Quantity": 2
+            },
+            {
+                "ItemId": "Ingredient_Life_Essence",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Ingredient_Bar_Silver",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Ingredient_Green_Gem",
+                "Quantity": 1
+            }
+        ],
+        "BenchRequirement": [
+            {
+                "Id": "Workbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Tinkering"
+                ]
+            }
+        ]
+    }
+}

@@ -23,6 +23,12 @@ Craft the **Fly Ring** at a **Tinkering Bench**.
 
 ## Changelog
 
+### v0.2.5
+- **New Item: Fire Ring:** Grants immunity to fire, lava, magma, and burn damage.
+- **ECS Damage Filtering:** Implemented a high-priority `DamageEventSystem` in the `FilterDamageGroup` for reliable damage cancellation.
+- **Specific Immunity:** Designed to only block heat-based damage, keeping other hazards like physical attacks and fall damage (handled by Fly Ring) relevant.
+- **Bugfixes:** Resolved JSON decoding errors in `EntityEffect` assets and improved item inventory detection.
+
 ### v0.2.4
 - **Critical Fix: Main Thread Synchronization:** Resolved `java.lang.NoClassDefFoundError` and `PlayerRef.getComponent(Velocity) called async` errors by properly scheduling component access on the Hytale World thread.
 - **Improved Game Loop Integration:** Logic now executes via `world.execute()` to ensure safe interactions with internal server components.

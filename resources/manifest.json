@@ -1,10 +1,10 @@
 {
     "Group": "tiffy",
     "Name": "FlyRing",
-    "Version": "0.2.4",
+    "Version": "0.2.5",
     "Description": "A magical ring that grants you the power of creative flight when carried in your inventory.",
     "Authors": [],
-    "Main": "com.tiffy.flyring.FlyRing",
+    "Main": "com.tiffy.flyring.IllegalRings",
     "ServerVersion": ">=2026.1.0",
     "Dependencies": {},
     "OptionalDependencies": {},

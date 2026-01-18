@@ -1,2 +1,10 @@
 Jewelry_Fly_Ring.name=Fly Ring
 Jewelry_Fly_Ring.description=A magical ring that grants creative flight.
+Jewelry_Fire_Ring.name=Fire Ring
+Jewelry_Fire_Ring.description=A burning ring that protects from fire and ignites the air.
+Jewelry_Water_Ring.name=Water Ring
+Jewelry_Water_Ring.description=A cool, moist ring that prevents drowning.
+Jewelry_Heal_Ring.name=Bloodsuck Ring
+Jewelry_Heal_Ring.description=Heals you for 35% of the damage you deal.
+Jewelry_Peacefull_Ring.name=Peaceful Ring
+Jewelry_Peacefull_Ring.description=Animals and monsters will ignore you while wearing this ring.
