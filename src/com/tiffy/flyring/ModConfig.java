@@ -55,7 +55,9 @@ public class ModConfig {
                 // but adds missing fields with their default values.
                 save(gameDirectory);
 
-                System.out.println("[ModConfig] Loaded and updated config from: " + configFile.getAbsolutePath());
+                if (instance != null && instance.debugLogging) {
+                    System.out.println("[ModConfig] Loaded and updated config from: " + configFile.getAbsolutePath());
+                }
                 return instance;
             } catch (IOException e) {
                 System.err.println("[ModConfig] Failed to load config: " + e.getMessage());

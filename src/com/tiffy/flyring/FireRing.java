@@ -29,7 +29,7 @@ public class FireRing {
         if (registerEvents) {
             setup();
         } else {
-            plugin.getLogger().atInfo().log("FireRing handler initialized.");
+            Log.setup(plugin, "FireRing handler initialized.");
         }
     }
 
@@ -39,7 +39,7 @@ public class FireRing {
         plugin.getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         plugin.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
 
-        plugin.getLogger().atInfo().log("FireRing handler initialized with damage filtering!");
+        Log.setup(plugin, "FireRing handler initialized with damage filtering!");
     }
 
     public void shutdown() {
@@ -81,13 +81,13 @@ public class FireRing {
             fireImmunePlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[FireRing] The ring glows with heat... you're immune to fire!"));
-            plugin.getLogger().atInfo().log(
+            Log.info(plugin,
                     "[FireRing] " + player.getPlayerRef().getUsername() + " equipped fire ring (immunity enabled)");
         } else if (!hasFireRing && wasImmune) {
             fireImmunePlayers.remove(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[FireRing] The flame fades. You're vulnerable again."));
-            plugin.getLogger().atInfo().log(
+            Log.info(plugin,
                     "[FireRing] " + player.getPlayerRef().getUsername() + " removed fire ring (immunity disabled)");
         }
     }

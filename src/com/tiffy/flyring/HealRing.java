@@ -29,7 +29,7 @@ public class HealRing {
         if (registerEvents) {
             setup();
         } else {
-            plugin.getLogger().atInfo().log("HealRing handler initialized.");
+            Log.setup(plugin, "HealRing handler initialized.");
         }
     }
 
@@ -38,7 +38,7 @@ public class HealRing {
         plugin.getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         plugin.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
 
-        plugin.getLogger().atInfo().log("HealRing handler initialized!");
+        Log.setup(plugin, "HealRing handler initialized!");
     }
 
     public void shutdown() {
@@ -80,14 +80,12 @@ public class HealRing {
             healRingPlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[HealRing] You feel a surge of life-force! High-speed recovery enabled."));
-            plugin.getLogger().atInfo().log(
-                    "[HealRing] " + player.getPlayerRef().getUsername() + " equipped heal ring");
+            Log.info(plugin, "[HealRing] " + player.getPlayerRef().getUsername() + " equipped heal ring");
         } else if (!hasHealRing && wasWearing) {
             healRingPlayers.remove(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[HealRing] The life-force fades... recovery back to normal."));
-            plugin.getLogger().atInfo().log(
-                    "[HealRing] " + player.getPlayerRef().getUsername() + " removed heal ring");
+            Log.info(plugin, "[HealRing] " + player.getPlayerRef().getUsername() + " removed heal ring");
         }
     }
 

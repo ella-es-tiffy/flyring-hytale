@@ -29,7 +29,7 @@ public class WaterRing {
         if (registerEvents) {
             setup();
         } else {
-            plugin.getLogger().atInfo().log("WaterRing handler initialized.");
+            Log.setup(plugin, "WaterRing handler initialized.");
         }
     }
 
@@ -39,7 +39,7 @@ public class WaterRing {
         plugin.getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         plugin.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
 
-        plugin.getLogger().atInfo().log("WaterRing handler initialized with damage filtering!");
+        Log.setup(plugin, "WaterRing handler initialized with damage filtering!");
     }
 
     public void shutdown() {
@@ -81,13 +81,13 @@ public class WaterRing {
             waterImmunePlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[WaterRing] The ring feels cool and moist... you can't drown!"));
-            plugin.getLogger().atInfo().log(
+            Log.info(plugin,
                     "[WaterRing] " + player.getPlayerRef().getUsername() + " equipped water ring (immunity enabled)");
         } else if (!hasWaterRing && wasImmune) {
             waterImmunePlayers.remove(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[WaterRing] Your lungs feel tight again. Be careful underwater!"));
-            plugin.getLogger().atInfo().log(
+            Log.info(plugin,
                     "[WaterRing] " + player.getPlayerRef().getUsername() + " removed water ring (immunity disabled)");
         }
     }

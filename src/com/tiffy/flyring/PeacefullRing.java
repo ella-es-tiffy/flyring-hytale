@@ -30,7 +30,7 @@ public class PeacefullRing {
         if (registerEvents) {
             setup();
         } else {
-            plugin.getLogger().atInfo().log("PeacefullRing handler initialized.");
+            Log.setup(plugin, "PeacefullRing handler initialized.");
         }
     }
 
@@ -39,7 +39,7 @@ public class PeacefullRing {
         plugin.getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         plugin.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
 
-        plugin.getLogger().atInfo().log("PeacefullRing handler initialized!");
+        Log.setup(plugin, "PeacefullRing handler initialized!");
     }
 
     public void onPlayerConnect(PlayerConnectEvent event) {
@@ -72,13 +72,11 @@ public class PeacefullRing {
 
         if (hasRing) {
             if (peacefulPlayers.add(uuid)) {
-                plugin.getLogger().atInfo()
-                        .log("[PeacefullRing] " + player.getPlayerRef().getUsername() + " equipped peaceful ring");
+                Log.info(plugin, "[PeacefullRing] " + player.getPlayerRef().getUsername() + " equipped peaceful ring");
             }
         } else {
             if (peacefulPlayers.remove(uuid)) {
-                plugin.getLogger().atInfo()
-                        .log("[PeacefullRing] " + player.getPlayerRef().getUsername() + " removed peaceful ring");
+                Log.info(plugin, "[PeacefullRing] " + player.getPlayerRef().getUsername() + " removed peaceful ring");
             }
         }
     }
