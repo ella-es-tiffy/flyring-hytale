@@ -69,13 +69,24 @@ public class RingDamageSystem extends DamageEventSystem {
 
             // --- 1. DEFENSIVE RING EFFECTS (Fire/Water Immunity) ---
             if (victimUuid != null) {
-                if (fireHandler != null && fireHandler.getFireImmunePlayers().contains(victimUuid)) {
+                // Check if FireRing is enabled
+                boolean fireEnabled = ModConfig.getInstance() != null &&
+                        ModConfig.getInstance().enabled != null &&
+                        ModConfig.getInstance().enabled.fireRing;
+
+                if (fireEnabled && fireHandler != null && fireHandler.getFireImmunePlayers().contains(victimUuid)) {
                     if (isFireRelated(causeId)) {
                         cancelDamage(event, "Fire", victimUuid, causeId);
                         return;
                     }
                 }
-                if (waterHandler != null && waterHandler.getWaterImmunePlayers().contains(victimUuid)) {
+
+                // Check if WaterRing is enabled
+                boolean waterEnabled = ModConfig.getInstance() != null &&
+                        ModConfig.getInstance().enabled != null &&
+                        ModConfig.getInstance().enabled.waterRing;
+
+                if (waterEnabled && waterHandler != null && waterHandler.getWaterImmunePlayers().contains(victimUuid)) {
                     if (isWaterRelated(causeId)) {
                         cancelDamage(event, "Water", victimUuid, causeId);
                         return;
@@ -84,8 +95,13 @@ public class RingDamageSystem extends DamageEventSystem {
             }
 
             // --- 2. OFFENSIVE RING EFFECTS (BloodSuck / Lifesteal) ---
+            // Check if HealRing is enabled
+            boolean healEnabled = ModConfig.getInstance() != null &&
+                    ModConfig.getInstance().enabled != null &&
+                    ModConfig.getInstance().enabled.healRing;
+
             // If the attacker has the ring, heal the attacker based on damage dealt
-            if (source instanceof Damage.EntitySource entitySource) {
+            if (healEnabled && source instanceof Damage.EntitySource entitySource) {
                 Ref<EntityStore> attackerRef = entitySource.getRef();
                 if (attackerRef != null && attackerRef.isValid()) {
                     UUIDComponent attackerUuidComp = (UUIDComponent) store.getComponent(attackerRef,
@@ -120,8 +136,13 @@ public class RingDamageSystem extends DamageEventSystem {
             }
 
             // --- 4. PEACEFUL RING LOGIC (Damage Prevention) ---
+            // Check if PeacefulRing is enabled
+            boolean peacefulEnabled = ModConfig.getInstance() != null &&
+                    ModConfig.getInstance().enabled != null &&
+                    ModConfig.getInstance().enabled.peacefulRing;
+
             // If the victim has the Peaceful Ring, cancel damage from NPC sources.
-            if (victimUuid != null && peacefulHandler != null
+            if (peacefulEnabled && victimUuid != null && peacefulHandler != null
                     && peacefulHandler.getPeacefulPlayers().contains(victimUuid)) {
                 if (source instanceof Damage.EntitySource entitySource) {
                     Ref<EntityStore> attackerRef = entitySource.getRef();
@@ -160,8 +181,13 @@ public class RingDamageSystem extends DamageEventSystem {
             if (damageDealt <= 0)
                 return;
 
-            // Heal 35% of damage dealt
-            float healAmount = damageDealt * 0.35f;
+            // Get lifesteal percentage from config (default 35%)
+            float lifestealPercent = 0.35f;
+            if (ModConfig.getInstance() != null && ModConfig.getInstance().gameplay != null) {
+                lifestealPercent = (float) ModConfig.getInstance().gameplay.lifestealPercent;
+            }
+
+            float healAmount = damageDealt * lifestealPercent;
             float currentHealth = healthStat.get();
             float maxHealth = healthStat.getMax();
             float newHealth = Math.min(maxHealth, currentHealth + healAmount);

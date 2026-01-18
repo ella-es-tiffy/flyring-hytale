@@ -86,6 +86,14 @@ public class FlyRing {
     }
 
     private void protectRingWearersFromFallDamage() {
+        // Check if FlyRing is enabled
+        if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null) {
+            if (!ModConfig.getInstance().enabled.flyRing) {
+                // Ring is disabled - do nothing
+                return;
+            }
+        }
+
         for (Player player : onlinePlayers) {
             try {
                 if (player == null || player.wasRemoved()) {
@@ -154,6 +162,14 @@ public class FlyRing {
 
         onlinePlayers.add(player);
 
+        // Check if FlyRing is enabled in config
+        if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null) {
+            if (!ModConfig.getInstance().enabled.flyRing) {
+                // Ring is disabled
+                return;
+            }
+        }
+
         try {
             MovementManager movement = player.getPlayerRef().getComponent(MovementManager.getComponentType());
             if (movement == null)
@@ -166,6 +182,14 @@ public class FlyRing {
             boolean canFly = settings.canFly;
 
             if (hasRing) {
+                // Check if FlyRing is disabled
+                if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
+                        && !ModConfig.getInstance().enabled.flyRing) {
+                    player.sendMessage(com.hypixel.hytale.server.core.Message
+                            .raw("§c[FlyRing] DISABLED by server"));
+                    return;
+                }
+
                 if (!canFly) {
                     settings.canFly = true;
                     movement.update(player.getPlayerRef().getPacketHandler());

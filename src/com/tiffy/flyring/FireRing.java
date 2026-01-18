@@ -70,6 +70,14 @@ public class FireRing {
         boolean wasImmune = fireImmunePlayers.contains(uuid);
 
         if (hasFireRing && !wasImmune) {
+            // Check if FireRing is disabled
+            if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
+                    && !ModConfig.getInstance().enabled.fireRing) {
+                player.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("§c[FireRing] DISABLED by server"));
+                return;
+            }
+
             fireImmunePlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[FireRing] The ring glows with heat... you're immune to fire!"));

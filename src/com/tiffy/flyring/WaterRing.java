@@ -70,6 +70,14 @@ public class WaterRing {
         boolean wasImmune = waterImmunePlayers.contains(uuid);
 
         if (hasWaterRing && !wasImmune) {
+            // Check if WaterRing is disabled
+            if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
+                    && !ModConfig.getInstance().enabled.waterRing) {
+                player.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("§c[WaterRing] DISABLED by server"));
+                return;
+            }
+
             waterImmunePlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[WaterRing] The ring feels cool and moist... you can't drown!"));

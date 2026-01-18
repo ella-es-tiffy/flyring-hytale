@@ -7,6 +7,8 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 
+import java.io.File;
+
 /**
  * IllegalRings - Main wrapper that orchestrates all ring handlers.
  */
@@ -24,7 +26,26 @@ public class IllegalRings extends JavaPlugin {
 
     @Override
     protected void setup() {
-        getLogger().atInfo().log("IllegalRings Mod v0.2.5 initializing...");
+        getLogger().atInfo().log("IllegalRings Mod v0.2.6 initializing...");
+
+        // Load mod config
+        try {
+            ModConfig.load(new File(".").getAbsoluteFile());
+            getLogger().atInfo().log("[IllegalRings] Config loaded successfully!");
+
+            // Log config values
+            ModConfig.Config cfg = ModConfig.getInstance();
+            if (cfg != null) {
+                getLogger().atInfo().log("[IllegalRings] Lifesteal: " + (cfg.gameplay.lifestealPercent * 100) + "%");
+                getLogger().atInfo()
+                        .log("[IllegalRings] Enabled - Fly:" + cfg.enabled.flyRing + " Fire:"
+                                + cfg.enabled.fireRing +
+                                " Water:" + cfg.enabled.waterRing + " Heal:" + cfg.enabled.healRing + " Peaceful:"
+                                + cfg.enabled.peacefulRing);
+            }
+        } catch (Exception e) {
+            getLogger().atInfo().log("[IllegalRings] Failed to load config: " + e.getMessage());
+        }
 
         // Initialize ring handlers
         flyRingHandler = new FlyRing(this, false);

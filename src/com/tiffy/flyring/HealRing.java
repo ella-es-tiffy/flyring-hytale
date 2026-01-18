@@ -69,6 +69,14 @@ public class HealRing {
         boolean wasWearing = healRingPlayers.contains(uuid);
 
         if (hasHealRing && !wasWearing) {
+            // Check if HealRing is disabled
+            if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
+                    && !ModConfig.getInstance().enabled.healRing) {
+                player.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("§c[HealRing] DISABLED by server"));
+                return;
+            }
+
             healRingPlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
                     .raw("[HealRing] You feel a surge of life-force! High-speed recovery enabled."));

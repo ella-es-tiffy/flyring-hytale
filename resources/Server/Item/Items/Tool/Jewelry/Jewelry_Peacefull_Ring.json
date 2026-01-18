@@ -28,20 +28,20 @@
     "Recipe": {
         "Input": [
             {
-                "ItemId": "Ingredient_Bar_Iron",
-                "Quantity": 2
+                "ItemId": "Rock_Stone_Cobble",
+                "Quantity": 200
             },
             {
                 "ItemId": "Ingredient_Life_Essence",
-                "Quantity": 1
+                "Quantity": 10
             },
             {
-                "ItemId": "Ingredient_Bar_Silver",
-                "Quantity": 1
+                "ItemId": "Ingredient_Fibre",
+                "Quantity": 100
             },
             {
-                "ItemId": "Ingredient_Green_Gem",
-                "Quantity": 1
+                "ItemId": "Plant_Fruit_Apple",
+                "Quantity": 10
             }
         ],
         "BenchRequirement": [

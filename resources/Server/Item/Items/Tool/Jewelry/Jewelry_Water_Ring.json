@@ -32,15 +32,15 @@
                 "Quantity": 100
             },
             {
-                "ItemId": "Ingredient_Water_Essence",
-                "Quantity": 100
+                "ItemId": "Ingredient_Life_Essence",
+                "Quantity": 25
             },
             {
-                "ItemId": "Ingredient_Bar_Silver",
-                "Quantity": 10
+                "ItemId": "Ingredient_Stick",
+                "Quantity": 50
             },
             {
-                "ItemId": "Ingredient_Blue_Gem",
+                "ItemId": "Ingredient_Crystal_Blue",
                 "Quantity": 1
             }
         ],
