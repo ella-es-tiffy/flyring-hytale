@@ -29,6 +29,7 @@ public class ModConfig {
     public static class Config {
         public RingEnabled enabled = new RingEnabled();
         public GameplayValues gameplay = new GameplayValues();
+        public boolean debugLogging = false; // Toggle for mod-specific debug logs
     }
 
     private static final String CONFIG_DIR = "mods/tiffy";
@@ -48,7 +49,13 @@ public class ModConfig {
         if (configFile.exists()) {
             try (FileReader reader = new FileReader(configFile)) {
                 instance = gson.fromJson(reader, Config.class);
-                System.out.println("[ModConfig] Loaded config from: " + configFile.getAbsolutePath());
+
+                // --- AUTO-UPDATE LOGIC ---
+                // Save immediately after loading. GSON keeps existing values
+                // but adds missing fields with their default values.
+                save(gameDirectory);
+
+                System.out.println("[ModConfig] Loaded and updated config from: " + configFile.getAbsolutePath());
                 return instance;
             } catch (IOException e) {
                 System.err.println("[ModConfig] Failed to load config: " + e.getMessage());
@@ -57,18 +64,31 @@ public class ModConfig {
 
         // Create default config
         instance = new Config();
-
-        try {
-            configDir.mkdirs();
-            try (FileWriter writer = new FileWriter(configFile)) {
-                gson.toJson(instance, writer);
-                System.out.println("[ModConfig] Created default config at: " + configFile.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.err.println("[ModConfig] Failed to save default config: " + e.getMessage());
-        }
+        save(gameDirectory);
 
         return instance;
+    }
+
+    /**
+     * Saves the current instance to the config file.
+     */
+    public static void save(File gameDirectory) {
+        if (instance == null)
+            return;
+
+        File configDir = new File(gameDirectory, CONFIG_DIR);
+        File configFile = new File(configDir, CONFIG_FILE);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try {
+            if (!configDir.exists())
+                configDir.mkdirs();
+            try (FileWriter writer = new FileWriter(configFile)) {
+                gson.toJson(instance, writer);
+            }
+        } catch (IOException e) {
+            System.err.println("[ModConfig] Failed to save config: " + e.getMessage());
+        }
     }
 
     public static Config getInstance() {

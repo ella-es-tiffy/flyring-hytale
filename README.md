@@ -64,6 +64,7 @@ Changes take effect after server restart.
 ## Upcoming Features
 
 - **Recipe Modification via Config**: Allow server owners to customize crafting recipes for all rings through `config.json` without recompiling the mod
+- **3D Ground Models**: Custom 3D models for rings when dropped on the ground, providing a more immersive visual experience compared to default item sprites.
 
 ## Technical Details
 

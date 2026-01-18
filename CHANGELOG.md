@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.6a - 2026-01-18
+- **Debug Logging Toggle**: Added `debugLogging` to `config.json` to silence spammy server logs (Lifesteal, Damage cancellation, Flight revocation). Defaults to `false`.
+- **Logging Refactor**: Centralized logging via new `Log` helper class.
+
 ## v0.2.6 - 2026-01-18
 
 ### Added - Configuration System

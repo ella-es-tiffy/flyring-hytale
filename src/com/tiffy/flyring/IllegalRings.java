@@ -26,25 +26,24 @@ public class IllegalRings extends JavaPlugin {
 
     @Override
     protected void setup() {
-        getLogger().atInfo().log("IllegalRings Mod v0.2.6 initializing...");
+        Log.setup(this, "IllegalRings Mod v0.2.6a initializing...");
 
         // Load mod config
         try {
             ModConfig.load(new File(".").getAbsoluteFile());
-            getLogger().atInfo().log("[IllegalRings] Config loaded successfully!");
+            Log.setup(this, "[IllegalRings] Config loaded successfully!");
 
             // Log config values
             ModConfig.Config cfg = ModConfig.getInstance();
-            if (cfg != null) {
-                getLogger().atInfo().log("[IllegalRings] Lifesteal: " + (cfg.gameplay.lifestealPercent * 100) + "%");
-                getLogger().atInfo()
-                        .log("[IllegalRings] Enabled - Fly:" + cfg.enabled.flyRing + " Fire:"
-                                + cfg.enabled.fireRing +
-                                " Water:" + cfg.enabled.waterRing + " Heal:" + cfg.enabled.healRing + " Peaceful:"
-                                + cfg.enabled.peacefulRing);
+            if (cfg != null && cfg.debugLogging) {
+                Log.setup(this, "[IllegalRings] Lifesteal: " + (cfg.gameplay.lifestealPercent * 100) + "%");
+                Log.setup(this, "[IllegalRings] Enabled - Fly:" + cfg.enabled.flyRing + " Fire:"
+                        + cfg.enabled.fireRing +
+                        " Water:" + cfg.enabled.waterRing + " Heal:" + cfg.enabled.healRing + " Peaceful:"
+                        + cfg.enabled.peacefulRing);
             }
         } catch (Exception e) {
-            getLogger().atInfo().log("[IllegalRings] Failed to load config: " + e.getMessage());
+            Log.setup(this, "[IllegalRings] Failed to load config: " + e.getMessage());
         }
 
         // Initialize ring handlers
@@ -70,7 +69,7 @@ public class IllegalRings extends JavaPlugin {
         // Register PeacefulAttitudeSystem (Ensures NPCs ignore the player fully)
         getEntityStoreRegistry().registerSystem(new PeacefulAttitudeSystem(peacefulRingHandler));
 
-        getLogger().atInfo().log("IllegalRings Mod v0.2.6 initialized! (Fly/Fire/Water/Heal/Peaceful Rings)");
+        Log.setup(this, "IllegalRings Mod v0.2.6a initialized! (Fly/Fire/Water/Heal/Peaceful Rings)");
     }
 
     private void onInventoryChange(LivingEntityInventoryChangeEvent event) {
@@ -110,6 +109,6 @@ public class IllegalRings extends JavaPlugin {
             waterRingHandler.shutdown();
         if (healRingHandler != null)
             healRingHandler.shutdown();
-        getLogger().atInfo().log("IllegalRings Mod shut down.");
+        Log.setup(this, "IllegalRings Mod shut down.");
     }
 }

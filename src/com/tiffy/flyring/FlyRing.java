@@ -43,7 +43,7 @@ public class FlyRing {
             // Initialize scheduler only
             scheduler = Executors.newScheduledThreadPool(1);
             scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 500, TimeUnit.MILLISECONDS);
-            plugin.getLogger().atInfo().log("FlyRing handler initialized!");
+            Log.setup(plugin, "FlyRing handler initialized!");
         }
     }
 
@@ -57,7 +57,7 @@ public class FlyRing {
         scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 500, TimeUnit.MILLISECONDS);
 
-        plugin.getLogger().atInfo().log("FlyRing handler initialized!");
+        Log.setup(plugin, "FlyRing handler initialized!");
     }
 
     public void shutdown() {
@@ -199,7 +199,7 @@ public class FlyRing {
                 trackedFlightPlayers.add(uuid);
             } else {
                 if (canFly && trackedFlightPlayers.contains(uuid)) {
-                    plugin.getLogger().atInfo().log("Revoking flight for " + playerName + " (Ring lost)");
+                    Log.info(plugin, "Revoking flight for " + playerName + " (Ring lost)");
 
                     movement.applyDefaultSettings();
                     settings = movement.getSettings();

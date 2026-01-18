@@ -160,7 +160,7 @@ public class RingDamageSystem extends DamageEventSystem {
             }
 
         } catch (Exception e) {
-            plugin.getLogger().atInfo().log("[RingDebug] Error: " + e.getMessage());
+            Log.info(plugin, "[RingDebug] Error: " + e.getMessage());
         }
     }
 
@@ -195,11 +195,10 @@ public class RingDamageSystem extends DamageEventSystem {
             // Apply healing to attacker
             attackerStats.setStatValue(DefaultEntityStatTypes.getHealth(), newHealth);
 
-            plugin.getLogger().atInfo().log(
+            Log.info(plugin,
                     "[BloodSuck] " + attackerUuid + " dealt " + damageDealt + " dmg and sucked " + healAmount + " HP");
-
         } catch (Exception e) {
-            plugin.getLogger().atInfo().log("[BloodSuck] Error: " + e.getMessage());
+            Log.info(plugin, "[BloodSuck] Error: " + e.getMessage());
         }
     }
 
@@ -213,7 +212,7 @@ public class RingDamageSystem extends DamageEventSystem {
     }
 
     private void cancelDamage(Damage event, String ringType, UUID uuid, String causeId) {
-        plugin.getLogger().atInfo().log("[RingDebug] " + ringType + " Ring blocked " + causeId + " for " + uuid);
+        Log.info(plugin, "[RingDebug] " + ringType + " Ring blocked " + causeId + " for " + uuid);
         event.setAmount(0.0f);
         event.setCancelled(true);
     }
