@@ -1,10 +1,21 @@
 # Changelog
 
+## v0.3.1 - 2026-01-20
+- **Bench Requirement System**:
+  - NEW: `benchRequirements` can now be customized for each ring in `config.json`.
+  - Move rings to any crafting station (e.g., `Workbench_Tinkering`) or category.
+  - Supports multiple workbenches and custom tier levels.
+- **Config Auto-Sync & Repair**:
+  - The mod now automatically repairs `config.json` at every start.
+  - Missing rings or empty bench requirements are automatically restored with default templates.
+  - User settings for ingredients and existing workbench configs are preserved.
+- **Improved Transparency**:
+  - Added a `_notice` field to `config.json` that shows the current mod version and regeneration instructions.
+- **Crafting Toggle Refinement**:
+  - Rings with `"craftable": false` are now completely hidden from the crafting UI.
+
 ## v0.3.0 - 2026-01-20
-- **RtChanger Integration**: Integrated the runtime recipe override system.
 - **Dynamic Recipe Overrides**: Players can now customize the ingredients for all 5 rings directly in `mods/tiffy/config.json`.
-- **"Insane" Default Balancing**:
-  - Fly, Fire, Water, Heal, and Peaceful Rings now default to high-endgame crafting costs (Iron, Gold, Thorium, Essences).
 - **Heal Ring Balancing**: Default lifesteal percentage reduced from 35% to 5% for better endgame balance.
 - **Improved Lifecycle Management**: Recipe overrides are now applied in the `start()` phase with retries for maximum reliability.
 
