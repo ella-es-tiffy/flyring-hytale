@@ -8,6 +8,9 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 
 import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * IllegalRings - Main wrapper that orchestrates all ring handlers.
@@ -19,6 +22,7 @@ public class IllegalRings extends JavaPlugin {
     private WaterRing waterRingHandler;
     private HealRing healRingHandler;
     private PeacefullRing peacefulRingHandler;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public IllegalRings(JavaPluginInit init) {
         super(init);
@@ -26,7 +30,7 @@ public class IllegalRings extends JavaPlugin {
 
     @Override
     protected void setup() {
-        Log.setup(this, "IllegalRings Mod v0.2.6a initializing...");
+        Log.setup(this, "IllegalRings Mod v0.3.0 initializing...");
 
         // Load mod config
         try {
@@ -69,7 +73,17 @@ public class IllegalRings extends JavaPlugin {
         // Register PeacefulAttitudeSystem (Ensures NPCs ignore the player fully)
         getEntityStoreRegistry().registerSystem(new PeacefulAttitudeSystem(peacefulRingHandler));
 
-        Log.setup(this, "IllegalRings Mod v0.2.6a initialized! (Fly/Fire/Water/Heal/Peaceful Rings)");
+        Log.setup(this, "IllegalRings Mod v0.3.0 initialized! (Fly/Fire/Water/Heal/Peaceful Rings)");
+    }
+
+    @Override
+    protected void start() {
+        // Initial apply of recipe overrides
+        applyRecipeOverrides();
+
+        // Retries to ensure we catch everything
+        scheduler.schedule(this::applyRecipeOverrides, 5, TimeUnit.SECONDS);
+        scheduler.schedule(this::applyRecipeOverrides, 15, TimeUnit.SECONDS);
     }
 
     private void onInventoryChange(LivingEntityInventoryChangeEvent event) {
@@ -99,6 +113,13 @@ public class IllegalRings extends JavaPlugin {
         peacefulRingHandler.onPlayerDisconnect(event);
     }
 
+    private void applyRecipeOverrides() {
+        ModConfig.Config cfg = ModConfig.getInstance();
+        if (cfg != null) {
+            RecipeManager.applyOverrides(cfg.recipeOverrides);
+        }
+    }
+
     @Override
     protected void shutdown() {
         if (flyRingHandler != null)
@@ -109,6 +130,7 @@ public class IllegalRings extends JavaPlugin {
             waterRingHandler.shutdown();
         if (healRingHandler != null)
             healRingHandler.shutdown();
+        scheduler.shutdown();
         Log.setup(this, "IllegalRings Mod shut down.");
     }
 }

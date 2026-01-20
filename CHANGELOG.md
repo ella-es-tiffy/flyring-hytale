@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.3.0 - 2026-01-20
+- **RtChanger Integration**: Integrated the runtime recipe override system.
+- **Dynamic Recipe Overrides**: Players can now customize the ingredients for all 5 rings directly in `mods/tiffy/config.json`.
+- **"Insane" Default Balancing**:
+  - Fly, Fire, Water, Heal, and Peaceful Rings now default to high-endgame crafting costs (Iron, Gold, Thorium, Essences).
+- **Heal Ring Balancing**: Default lifesteal percentage reduced from 35% to 5% for better endgame balance.
+- **Improved Lifecycle Management**: Recipe overrides are now applied in the `start()` phase with retries for maximum reliability.
+
 ## v0.2.6a - 2026-01-18
 - **Debug Logging Toggle**: Added `debugLogging` to `config.json` to silence spammy server logs (Lifesteal, Damage cancellation, Flight revocation). Defaults to `false`.
 - **Logging Refactor**: Centralized logging via new `Log` helper class.
