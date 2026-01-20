@@ -30,6 +30,7 @@ public class ModConfig {
 
     public static class Config {
         public RingEnabled enabled = new RingEnabled();
+        public RingEnabled craftable = new RingEnabled();
         public GameplayValues gameplay = new GameplayValues();
         public boolean debugLogging = false; // Toggle for mod-specific debug logs
         public List<RecipeOverride> recipeOverrides = new ArrayList<>();

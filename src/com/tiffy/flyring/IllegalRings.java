@@ -116,7 +116,7 @@ public class IllegalRings extends JavaPlugin {
     private void applyRecipeOverrides() {
         ModConfig.Config cfg = ModConfig.getInstance();
         if (cfg != null) {
-            RecipeManager.applyOverrides(cfg.recipeOverrides);
+            RecipeManager.applyOverrides(cfg.recipeOverrides, cfg.craftable);
         }
     }
 
