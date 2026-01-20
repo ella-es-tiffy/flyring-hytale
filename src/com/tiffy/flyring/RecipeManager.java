@@ -31,8 +31,7 @@ public class RecipeManager {
             if (target.contains("Fly_Ring")) isCraftable = craftable.flyRing;
             else if (target.contains("Fire_Ring")) isCraftable = craftable.fireRing;
             else if (target.contains("Water_Ring")) isCraftable = craftable.waterRing;
-            else if (target.contains("Heal_Ring")) isCraftable = craftable.healRing;
-            else if (target.contains("Peacefull_Ring")) isCraftable = craftable.peacefulRing;
+            else if (target.contains("Heal_Ring")) isCraftable = craftable.healRing;            else if (target.contains("Peacefull_Ring")) isCraftable = craftable.peacefulRing;
             for (CraftingRecipe recipe : targetRecipes) {
                 applyRecipeChange(recipe, override, isCraftable);
             }
@@ -47,6 +46,18 @@ public class RecipeManager {
                 newInputs.add(new MaterialQuantity(ing.id, null, null, ing.amount, null));
             }
             inputField.set(recipe, newInputs.toArray(new MaterialQuantity[0]));
+            if (override.benchRequirements != null && !override.benchRequirements.isEmpty()) {
+                Field benchField = CraftingRecipe.class.getDeclaredField("benchRequirement");
+                benchField.setAccessible(true);
+                List<BenchRequirement> benchReqs = new ArrayList<>();
+                for (ModConfig.BenchRequirementConfig brc : override.benchRequirements) {
+                    BenchType type = BenchType.Crafting;
+                    try { type = BenchType.valueOf(brc.type); } catch (Exception ignored) {}
+                    String[] categories = brc.categories != null ? brc.categories.toArray(new String[0]) : null;
+                    benchReqs.add(new BenchRequirement(type, brc.id, categories, brc.requiredTierLevel));
+                }
+                benchField.set(recipe, benchReqs.toArray(new BenchRequirement[0]));
+            }
             if (!isCraftable) {
                 Field benchField = CraftingRecipe.class.getDeclaredField("benchRequirement");
                 benchField.setAccessible(true);
