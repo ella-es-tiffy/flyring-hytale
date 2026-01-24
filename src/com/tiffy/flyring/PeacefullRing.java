@@ -63,12 +63,7 @@ public class PeacefullRing {
             return;
 
         UUID uuid = player.getPlayerRef().getUuid();
-        Inventory inv = player.getInventory();
-        if (inv == null)
-            return;
-
-        boolean hasRing = checkContainerForItem(inv.getHotbar(), PEACEFULL_RING_ITEM_ID) ||
-                checkContainerForItem(inv.getStorage(), PEACEFULL_RING_ITEM_ID);
+        boolean hasRing = RingUtils.hasRing(player, PEACEFULL_RING_ITEM_ID);
 
         if (hasRing) {
             if (peacefulPlayers.add(uuid)) {
@@ -79,21 +74,6 @@ public class PeacefullRing {
                 Log.info(plugin, "[PeacefullRing] " + player.getPlayerRef().getUsername() + " removed peaceful ring");
             }
         }
-    }
-
-    private boolean checkContainerForItem(ItemContainer container, String itemId) {
-        if (container == null)
-            return false;
-
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack stack = container.getItemStack(i);
-            if (stack != null && !stack.isEmpty()) {
-                if (itemId.equals(stack.getItemId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public Set<UUID> getPeacefulPlayers() {

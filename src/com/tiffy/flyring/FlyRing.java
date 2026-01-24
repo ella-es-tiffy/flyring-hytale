@@ -4,20 +4,19 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.movement.MovementManager;
-import com.hypixel.hytale.server.core.inventory.Inventory;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.protocol.MovementSettings;
 import com.hypixel.hytale.protocol.MovementStates;
-import com.hypixel.hytale.protocol.SavedMovementStates;
-import com.hypixel.hytale.protocol.packets.player.SetMovementStates;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.World;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
@@ -31,8 +30,8 @@ public class FlyRing {
     private static final String FLY_RING_ITEM_ID = "Jewelry_Fly_Ring";
 
     private final JavaPlugin plugin;
-    private final Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
     private final Set<UUID> trackedFlightPlayers = ConcurrentHashMap.newKeySet();
+    private final Map<UUID, Boolean> wasSitting = new ConcurrentHashMap<>();
     private ScheduledExecutorService scheduler;
 
     public FlyRing(JavaPlugin plugin, boolean registerEvents) {
@@ -42,7 +41,7 @@ public class FlyRing {
         } else {
             // Initialize scheduler only
             scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 500, TimeUnit.MILLISECONDS);
+            scheduler.scheduleAtFixedRate(this::tickEffects, 0, 500, TimeUnit.MILLISECONDS);
             Log.setup(plugin, "FlyRing handler initialized!");
         }
     }
@@ -52,10 +51,11 @@ public class FlyRing {
         plugin.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, this::onInventoryChange);
         plugin.getEventRegistry().registerGlobal(PlayerConnectEvent.class, this::onPlayerConnect);
         plugin.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
+        plugin.getEventRegistry().registerGlobal(PlayerReadyEvent.class, this::onPlayerReady);
 
         // Fall damage protection (500ms interval to minimize spam)
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::protectRingWearersFromFallDamage, 0, 500, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::tickEffects, 0, 500, TimeUnit.MILLISECONDS);
 
         Log.setup(plugin, "FlyRing handler initialized!");
     }
@@ -67,25 +67,28 @@ public class FlyRing {
     }
 
     public void onPlayerConnect(PlayerConnectEvent event) {
+        // Handled via inventory change or periodic tick
+    }
+
+    public void onPlayerReady(PlayerReadyEvent event) {
         if (event.getPlayer() != null) {
-            onlinePlayers.add(event.getPlayer());
+            updateFlightStatus(event.getPlayer());
         }
     }
 
     public void onPlayerDisconnect(PlayerDisconnectEvent event) {
         UUID uuid = event.getPlayerRef().getUuid();
-        onlinePlayers.removeIf(p -> p.getPlayerRef().getUuid().equals(uuid));
         trackedFlightPlayers.remove(uuid);
+        wasSitting.remove(uuid);
     }
 
     public void onInventoryChange(LivingEntityInventoryChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
-            onlinePlayers.add(player);
             updateFlightStatus(player);
         }
     }
 
-    private void protectRingWearersFromFallDamage() {
+    private void tickEffects() {
         // Check if FlyRing is enabled
         if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null) {
             if (!ModConfig.getInstance().enabled.flyRing) {
@@ -94,61 +97,140 @@ public class FlyRing {
             }
         }
 
-        for (Player player : onlinePlayers) {
-            try {
-                if (player == null || player.wasRemoved()) {
-                    onlinePlayers.remove(player);
-                    continue;
-                }
+        // Heartbeat log to ensure scheduler is alive
+        Log.info(plugin, "[FlyRing] Heartbeat - Scanning players...");
 
-                World world = player.getWorld();
-                if (world == null || !world.isAlive())
-                    continue;
+        // Use global player manager from Universe for maximum reliability
+        for (com.hypixel.hytale.server.core.universe.PlayerRef playerRef : com.hypixel.hytale.server.core.universe.Universe
+                .get().getPlayers()) {
+            java.util.UUID worldUuid = playerRef.getWorldUuid();
+            if (worldUuid == null)
+                continue;
 
-                world.execute(() -> {
-                    try {
-                        if (!hasRingInInventory(player))
-                            return;
+            World world = com.hypixel.hytale.server.core.universe.Universe.get().getWorld(worldUuid);
+            if (world == null || !world.isAlive())
+                continue;
 
-                        Velocity velComp = player.getPlayerRef().getComponent(Velocity.getComponentType());
-                        double yVelocity = (velComp != null) ? velComp.getY() : 0;
+            world.execute(() -> {
+                try {
+                    Player player = playerRef.getComponent(Player.getComponentType());
+                    if (player == null || player.wasRemoved())
+                        return;
+                    boolean hasRing = RingUtils.hasRing(player, FLY_RING_ITEM_ID);
 
-                        MovementStatesComponent statesComp = player.getPlayerRef()
-                                .getComponent(MovementStatesComponent.getComponentType());
-                        boolean onGround = false;
+                    if (hasRing && Math.random() < 0.1) { // Log occasionally to verify detection
+                        Log.info(plugin,
+                                "[FlyRing] Tracking " + player.getPlayerRef().getUsername() + " (Ring detected)");
+                    }
+
+                    // 1. Proactive Flight Refresh (Fix for Sleeping/Sitting/Teleporting Bug)
+                    if (hasRing) {
+                        refreshFlightSettings(player);
+                    }
+
+                    // 2. Fall Damage Protection
+                    Velocity velComp = playerRef.getComponent(Velocity.getComponentType());
+                    double yVelocity = (velComp != null) ? velComp.getY() : 0;
+
+                    MovementStatesComponent statesComp = playerRef
+                            .getComponent(MovementStatesComponent.getComponentType());
+                    boolean onGround = false;
+                    if (statesComp != null) {
+                        MovementStates states = statesComp.getMovementStates();
+                        if (states != null) {
+                            onGround = states.onGround;
+                        }
+                    }
+
+                    // Block fall damage
+                    if (yVelocity < -0.5 && !onGround && hasRing) {
+                        if (velComp != null) {
+                            velComp.setZero();
+                        }
                         if (statesComp != null) {
                             MovementStates states = statesComp.getMovementStates();
                             if (states != null) {
-                                onGround = states.onGround;
+                                states.onGround = true;
+                                states.falling = false;
+                                statesComp.setMovementStates(states);
                             }
                         }
+                    }
 
-                        // Block fall damage
-                        if (yVelocity < -0.5 && !onGround) {
-                            if (velComp != null) {
-                                velComp.setZero();
-                            }
-                            if (statesComp != null) {
-                                MovementStates states = statesComp.getMovementStates();
-                                if (states != null) {
-                                    states.onGround = true;
-                                    states.falling = false;
-                                    statesComp.setMovementStates(states);
-                                }
-                            }
-                        }
-
+                    if (hasRing) {
                         double fallDistance = player.getCurrentFallDistance();
                         if (fallDistance > 0) {
                             player.setCurrentFallDistance(0);
                         }
-                    } catch (Exception inner) {
-                        // Silent skip
                     }
-                });
-            } catch (Exception e) {
-                // Silently skip if world access fails
+                } catch (Exception inner) {
+                    // Silent skip
+                }
+            });
+        }
+    }
+
+    private void refreshFlightSettings(Player player) {
+        try {
+            MovementManager movement = player.getPlayerRef().getComponent(MovementManager.getComponentType());
+            if (movement == null)
+                return;
+
+            MovementSettings settings = movement.getSettings();
+            MovementSettings def = movement.getDefaultSettings();
+
+            boolean updated = false;
+            boolean isSitting = false;
+
+            // 1. Determine if player is currently sitting/sleeping
+            MovementStatesComponent statesComp = player.getPlayerRef()
+                    .getComponent(MovementStatesComponent.getComponentType());
+            if (statesComp != null) {
+                MovementStates states = statesComp.getMovementStates();
+                if (states != null) {
+                    isSitting = states.sitting || states.sleeping || states.mounting;
+                }
             }
+
+            java.util.UUID uuid = player.getPlayerRef().getUuid();
+            boolean previouslySitting = wasSitting.getOrDefault(uuid, false);
+
+            // 2. Detect "Standing Up" event
+            if (previouslySitting && !isSitting) {
+                Log.info(plugin, "[FlyRing] PLAYER STOOD UP: FORCE RE-SYNC FOR " + player.getPlayerRef().getUsername());
+                updated = true; // Force packet send later
+            }
+            wasSitting.put(uuid, isSitting);
+
+            // 3. Ensure CanFly is true in both Current and Default settings
+            if (def != null && !def.canFly) {
+                def.canFly = true;
+                updated = true;
+                Log.info(plugin, "[FlyRing] Patching DEFAULT flight for " + player.getPlayerRef().getUsername());
+            }
+
+            if (settings != null && !settings.canFly) {
+                settings.canFly = true;
+                updated = true;
+                Log.info(plugin, "[FlyRing] Patching CURRENT flight for " + player.getPlayerRef().getUsername());
+            }
+
+            // 4. Aggressively push updates to the client
+            if (updated || (Math.random() < 0.1 && !isSitting)) {
+                movement.update(player.getPlayerRef().getPacketHandler());
+
+                if (statesComp != null && !isSitting) {
+                    MovementStates states = statesComp.getMovementStates();
+                    if (states != null && !states.onGround && !states.flying) {
+                        states.flying = true;
+                        statesComp.setMovementStates(states);
+                        Log.info(plugin, "[FlyRing] Heartbeat Force-Sync: Flying state ON for "
+                                + player.getPlayerRef().getUsername());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.severe(plugin, "Error in flight refresh: " + e.getMessage());
         }
     }
 
@@ -156,16 +238,13 @@ public class FlyRing {
         if (player == null)
             return;
 
-        boolean hasRing = hasRingInInventory(player);
+        boolean hasRing = RingUtils.hasRing(player, FLY_RING_ITEM_ID);
         UUID uuid = player.getPlayerRef().getUuid();
         String playerName = player.getPlayerRef().getUsername();
-
-        onlinePlayers.add(player);
 
         // Check if FlyRing is enabled in config
         if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null) {
             if (!ModConfig.getInstance().enabled.flyRing) {
-                // Ring is disabled
                 return;
             }
         }
@@ -179,18 +258,8 @@ public class FlyRing {
             if (settings == null)
                 return;
 
-            boolean canFly = settings.canFly;
-
             if (hasRing) {
-                // Check if FlyRing is disabled
-                if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
-                        && !ModConfig.getInstance().enabled.flyRing) {
-                    player.sendMessage(com.hypixel.hytale.server.core.Message
-                            .raw("§c[FlyRing] DISABLED by server"));
-                    return;
-                }
-
-                if (!canFly) {
+                if (!settings.canFly) {
                     settings.canFly = true;
                     movement.update(player.getPlayerRef().getPacketHandler());
                     player.sendMessage(com.hypixel.hytale.server.core.Message
@@ -198,70 +267,18 @@ public class FlyRing {
                 }
                 trackedFlightPlayers.add(uuid);
             } else {
-                if (canFly && trackedFlightPlayers.contains(uuid)) {
+                if (trackedFlightPlayers.contains(uuid)) {
                     Log.info(plugin, "Revoking flight for " + playerName + " (Ring lost)");
-
                     movement.applyDefaultSettings();
                     settings = movement.getSettings();
                     if (settings != null)
                         settings.canFly = false;
                     movement.update(player.getPlayerRef().getPacketHandler());
-
-                    try {
-                        player.getPlayerRef().getPacketHandler()
-                                .write(new SetMovementStates(new SavedMovementStates(false)));
-                    } catch (Exception ex) {
-                    }
-
-                    try {
-                        MovementStatesComponent statesComp = player.getPlayerRef()
-                                .getComponent(MovementStatesComponent.getComponentType());
-                        if (statesComp != null) {
-                            MovementStates states = statesComp.getMovementStates();
-                            if (states != null) {
-                                states.flying = false;
-                                states.onGround = true;
-                                states.falling = false;
-                                statesComp.setMovementStates(states);
-                            }
-                        }
-                        player.setCurrentFallDistance(0);
-                    } catch (Exception ex) {
-                    }
-
-                    player.sendMessage(com.hypixel.hytale.server.core.Message
-                            .raw("[FlyRing] The ring's magic fades. Be careful!"));
+                    trackedFlightPlayers.remove(uuid);
                 }
-
-                trackedFlightPlayers.remove(uuid);
             }
         } catch (Exception e) {
-            plugin.getLogger().atSevere().log("Error in updateFlightStatus: " + e.getMessage());
+            Log.severe(plugin, "Error in updateFlightStatus: " + e.getMessage());
         }
-    }
-
-    private boolean hasRingInInventory(Player player) {
-        Inventory inv = player.getInventory();
-        if (inv == null)
-            return false;
-
-        return checkContainerForItem(inv.getHotbar(), FLY_RING_ITEM_ID) ||
-                checkContainerForItem(inv.getStorage(), FLY_RING_ITEM_ID);
-    }
-
-    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container,
-            String itemId) {
-        if (container == null)
-            return false;
-
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack stack = container.getItemStack(i);
-            if (stack != null && !stack.isEmpty()) {
-                if (itemId.equals(stack.getItemId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

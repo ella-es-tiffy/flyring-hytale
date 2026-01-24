@@ -1,5 +1,44 @@
 # Changelog
 
+## v0.3.20 - 2026-01-24
+- **Peaceful Ring Polish**:
+  - **Interaction Fix**: Changed AI attitude from `IGNORE` to `FRIENDLY`. This restores interaction prompts (like 'F' to talk), enabling trading and questing while equipped.
+  - **Seamless Immunity**: Hostile mobs now view the wearer as a friend and will not attempt to attack, removing the visual clutter of blocked hits.
+- **Flight Stability**:
+  - **Gamemode Conflict**: Fixed an issue where switching to `/gm adventure` would revoke flight. The mod now correctly enforces flight privileges regardless of gamemode defaults.
+
+## v0.3.18 - 2026-01-24
+- **Fix: Flight-Reset when standing up (Beds/Chairs)**:
+  - **State-Change-Detection**: The mod now actively detects the transition from "sitting/sleeping" to "standing". When standing up, a force-sync of the flight status is immediately sent to the client.
+  - **Default-Settings Patch**: Hytale often resets movement settings to "Default" when standing up. The mod now also overrides these standard values (`defaultSettings`), so a reset automatically lands back in flight mode.
+- **Fix: Crash on Login / World Change**:
+  - Resolved `SkipSentryException` crash by ensuring all player component access is performed safely on the respective World thread.
+- **Improved Fall Damage Immunity**:
+  - Optimized fall distance reset for better reliability during rapid vertical movement.
+- **Enhanced Debugging**:
+  - Added `Heartbeat` logging to validate scheduler activity.
+  - Added proactive sync packets every few seconds to prevent client-server desync.
+  - Expanded `DebugEventListener` to track `Interact`, `MouseButton`, `Ready`, `WorldChange`, and `UseBlock` events.
+
+## v0.3.5 - 2026-01-24
+- **Expanded Inventory Support (Backpack & Equipment)**:
+  - **Backpack Support**: Rings now function automatically while stored inside any equipped backpack.
+  - **Equipment Slot Support**: Rings are now detected in Jewelry/Armor slots.
+  - **Utility Slot Support**: Rings now work when placed in Off-hand or special Utility slots.
+  - Applies to all 5 rings: **Fly, Fire, Water, Heal, and Peaceful**.
+- **Bugfixes**:
+  - **Sleeping/Sitting Bug**: Fixed an issue where the Fly Ring's flight ability was lost after sleeping in a bed or sitting on a bench/chair. The mod now proactively restores flight settings if the game engine resets them.
+- **Technical Refactor**:
+  - Implemented `RingUtils` to centralize inventory scanning.
+  - Improved performance by reducing redundant inventory checks.
+  - Support for custom storage components and modded inventory containers.
+
+## v0.3.2 - 2026-01-24
+- **Recipe Batch Synchronization**:
+  - Refactored `RecipeManager` to collect all modified recipes into a batch.
+  - Updates are now performed in a single `loadAssets` call instead of individual updates.
+  - Mitigates "only 60 recipes" limit issues and improves performance during the first tick.
+
 ## v0.3.1 - 2026-01-20
 - **Bench Requirement System**:
   - NEW: `benchRequirements` can now be customized for each ring in `config.json`.

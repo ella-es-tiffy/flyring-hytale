@@ -7,6 +7,10 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.system.tick.TickingSystem;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,7 +34,7 @@ public class IllegalRings extends JavaPlugin {
 
     @Override
     protected void setup() {
-        Log.setup(this, "IllegalRings Mod v0.3.0 initializing...");
+        Log.setup(this, "IllegalRings Mod v0.3.2 initializing...");
 
         // Load mod config
         try {
@@ -73,17 +77,24 @@ public class IllegalRings extends JavaPlugin {
         // Register PeacefulAttitudeSystem (Ensures NPCs ignore the player fully)
         getEntityStoreRegistry().registerSystem(new PeacefulAttitudeSystem(peacefulRingHandler));
 
-        Log.setup(this, "IllegalRings Mod v0.3.0 initialized! (Fly/Fire/Water/Heal/Peaceful Rings)");
+        // Initialize and setup DebugEventListener
+        DebugEventListener debugListener = new DebugEventListener(this);
+        debugListener.setup();
+
+        Log.setup(this, "IllegalRings Mod v0.3.5 initialized! (Fly/Fire/Water/Heal/Peaceful Rings)");
     }
 
     @Override
     protected void start() {
-        // Initial apply of recipe overrides
-        applyRecipeOverrides();
+        // Initial apply of recipe overrides - no broadcast at first to avoid startup
+        // errors
+        applyRecipeOverrides(false);
 
-        // Retries to ensure we catch everything
-        scheduler.schedule(this::applyRecipeOverrides, 5, TimeUnit.SECONDS);
-        scheduler.schedule(this::applyRecipeOverrides, 15, TimeUnit.SECONDS);
+        // Retries to ensure we catch everything during late asset loading
+        // Second call with broadcast=true to update any early-joining clients
+        scheduler.schedule(() -> applyRecipeOverrides(true), 1, TimeUnit.SECONDS);
+        scheduler.schedule(() -> applyRecipeOverrides(true), 5, TimeUnit.SECONDS);
+        scheduler.schedule(() -> applyRecipeOverrides(true), 15, TimeUnit.SECONDS);
     }
 
     private void onInventoryChange(LivingEntityInventoryChangeEvent event) {
@@ -113,10 +124,10 @@ public class IllegalRings extends JavaPlugin {
         peacefulRingHandler.onPlayerDisconnect(event);
     }
 
-    private void applyRecipeOverrides() {
+    private void applyRecipeOverrides(boolean broadcast) {
         ModConfig.Config cfg = ModConfig.getInstance();
         if (cfg != null) {
-            RecipeManager.applyOverrides(cfg.recipeOverrides, cfg.craftable);
+            RecipeManager.applyOverrides(cfg.recipeOverrides, cfg.craftable, broadcast);
         }
     }
 

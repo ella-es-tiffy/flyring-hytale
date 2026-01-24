@@ -3,6 +3,7 @@
         "Name": "items.Jewelry_Heal_Ring.name",
         "Description": "items.Jewelry_Heal_Ring.description"
     },
+    "MaxStackSize": 1,
     "Categories": [
         "Tool.Misc"
     ],

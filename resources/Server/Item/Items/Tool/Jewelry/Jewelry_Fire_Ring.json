@@ -3,6 +3,7 @@
         "Name": "items.Jewelry_Fire_Ring.name",
         "Description": "items.Jewelry_Fire_Ring.description"
     },
+    "MaxStackSize": 1,
     "Categories": [
         "Tool.Misc"
     ],

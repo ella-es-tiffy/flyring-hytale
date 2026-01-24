@@ -32,9 +32,9 @@ public class PeacefulAttitudeProvider implements IAttitudeProvider {
         if (playerComp != null) {
             UUID uuid = playerComp.getUuid();
             if (handler.getPeacefulPlayers().contains(uuid)) {
-                // If player has the ring, return IGNORE or NEUTRAL
-                // IGNORE is better for "don't even look at me"
-                return Attitude.IGNORE;
+                // Changing NEUTRAL to FRIENDLY to fully prevent hostile targeting
+                // whilst maintaining interaction capability.
+                return Attitude.FRIENDLY;
             }
         }
 

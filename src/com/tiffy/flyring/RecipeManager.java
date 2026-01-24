@@ -13,31 +13,60 @@ import java.util.Collections;
 import java.util.List;
 
 public class RecipeManager {
-    public static void applyOverrides(List<ModConfig.RecipeOverride> overrides, ModConfig.RingEnabled craftable) {
-        if (overrides == null || overrides.isEmpty()) return;
+    public static void applyOverrides(List<ModConfig.RecipeOverride> overrides, ModConfig.RingEnabled craftable,
+            boolean broadcast) {
+        if (overrides == null || overrides.isEmpty())
+            return;
         DefaultAssetMap<String, CraftingRecipe> assetMap = CraftingRecipe.getAssetMap();
+        List<CraftingRecipe> allModifiedRecipes = new ArrayList<>();
+
         for (ModConfig.RecipeOverride override : overrides) {
             String target = override.targetItemId;
             List<CraftingRecipe> targetRecipes = new ArrayList<>();
             CraftingRecipe exact = assetMap.getAsset(target);
-            if (exact != null) targetRecipes.add(exact);
+            if (exact != null)
+                targetRecipes.add(exact);
             for (String key : assetMap.getAssetMap().keySet()) {
                 if (key.startsWith(target) && key.contains("_Recipe_Generated_")) {
                     CraftingRecipe r = assetMap.getAsset(key);
-                    if (r != null && !targetRecipes.contains(r)) targetRecipes.add(r);
+                    if (r != null && !targetRecipes.contains(r))
+                        targetRecipes.add(r);
                 }
             }
             boolean isCraftable = true;
-            if (target.contains("Fly_Ring")) isCraftable = craftable.flyRing;
-            else if (target.contains("Fire_Ring")) isCraftable = craftable.fireRing;
-            else if (target.contains("Water_Ring")) isCraftable = craftable.waterRing;
-            else if (target.contains("Heal_Ring")) isCraftable = craftable.healRing;            else if (target.contains("Peacefull_Ring")) isCraftable = craftable.peacefulRing;
+            if (target.contains("Fly_Ring"))
+                isCraftable = craftable.flyRing;
+            else if (target.contains("Fire_Ring"))
+                isCraftable = craftable.fireRing;
+            else if (target.contains("Water_Ring"))
+                isCraftable = craftable.waterRing;
+            else if (target.contains("Heal_Ring"))
+                isCraftable = craftable.healRing;
+            else if (target.contains("Peacefull_Ring"))
+                isCraftable = craftable.peacefulRing;
+
             for (CraftingRecipe recipe : targetRecipes) {
-                applyRecipeChange(recipe, override, isCraftable);
+                if (modifyRecipe(recipe, override, isCraftable)) {
+                    allModifiedRecipes.add(recipe);
+                }
             }
         }
+
+        if (!allModifiedRecipes.isEmpty()) {
+            AssetStore<String, CraftingRecipe, DefaultAssetMap<String, CraftingRecipe>> store = CraftingRecipe
+                    .getAssetStore();
+            String packId = "Hytale:Hytale";
+            String firstPack = CraftingRecipe.getAssetMap().getAssetPack(allModifiedRecipes.get(0).getId());
+            if (firstPack != null)
+                packId = firstPack;
+
+            store.loadAssets(packId, allModifiedRecipes, AssetUpdateQuery.DEFAULT, broadcast);
+            System.out.println("[IllegalRings] Batch synchronized " + allModifiedRecipes.size()
+                    + " recipes (Broadcast: " + broadcast + ")");
+        }
     }
-    private static void applyRecipeChange(CraftingRecipe recipe, ModConfig.RecipeOverride override, boolean isCraftable) {
+
+    private static boolean modifyRecipe(CraftingRecipe recipe, ModConfig.RecipeOverride override, boolean isCraftable) {
         try {
             Field inputField = CraftingRecipe.class.getDeclaredField("input");
             inputField.setAccessible(true);
@@ -46,34 +75,37 @@ public class RecipeManager {
                 newInputs.add(new MaterialQuantity(ing.id, null, null, ing.amount, null));
             }
             inputField.set(recipe, newInputs.toArray(new MaterialQuantity[0]));
+
             if (override.benchRequirements != null && !override.benchRequirements.isEmpty()) {
                 Field benchField = CraftingRecipe.class.getDeclaredField("benchRequirement");
                 benchField.setAccessible(true);
                 List<BenchRequirement> benchReqs = new ArrayList<>();
                 for (ModConfig.BenchRequirementConfig brc : override.benchRequirements) {
                     BenchType type = BenchType.Crafting;
-                    try { type = BenchType.valueOf(brc.type); } catch (Exception ignored) {}
+                    try {
+                        type = BenchType.valueOf(brc.type);
+                    } catch (Exception ignored) {
+                    }
                     String[] categories = brc.categories != null ? brc.categories.toArray(new String[0]) : null;
                     benchReqs.add(new BenchRequirement(type, brc.id, categories, brc.requiredTierLevel));
                 }
                 benchField.set(recipe, benchReqs.toArray(new BenchRequirement[0]));
             }
+
             if (!isCraftable) {
                 Field benchField = CraftingRecipe.class.getDeclaredField("benchRequirement");
                 benchField.setAccessible(true);
-                benchField.set(recipe, new BenchRequirement[] { new BenchRequirement(BenchType.Crafting, "DISABLED_BY_SERVER", new String[]{"HIDDEN"}, 999) });
+                benchField.set(recipe, new BenchRequirement[] { new BenchRequirement(BenchType.Crafting,
+                        "DISABLED_BY_SERVER", new String[] { "HIDDEN" }, 999) });
                 Field memField = CraftingRecipe.class.getDeclaredField("requiredMemoriesLevel");
                 memField.setAccessible(true);
                 memField.set(recipe, 9999);
                 System.out.println("[IllegalRings] HIDDEN recipe for: " + recipe.getId());
             }
-            AssetStore<String, CraftingRecipe, DefaultAssetMap<String, CraftingRecipe>> store = CraftingRecipe.getAssetStore();
-            String packId = CraftingRecipe.getAssetMap().getAssetPack(recipe.getId());
-            if (packId == null) packId = "Hytale:Hytale";
-            store.loadAssets(packId, Collections.singletonList(recipe), AssetUpdateQuery.DEFAULT, true);
-            if (isCraftable) System.out.println("[IllegalRings] Configured recipe: " + recipe.getId());
+            return true;
         } catch (Exception e) {
-            System.err.println("[IllegalRings] Failed to override " + recipe.getId() + ": " + e.getMessage());
+            System.err.println("[IllegalRings] Failed to modify " + recipe.getId() + ": " + e.getMessage());
+            return false;
         }
     }
 }

@@ -93,29 +93,7 @@ public class WaterRing {
     }
 
     private boolean hasRingInInventory(Player player) {
-        Inventory inv = player.getInventory();
-        if (inv == null) {
-            return false;
-        }
-
-        return checkContainerForItem(inv.getHotbar(), WATER_RING_ITEM_ID) ||
-                checkContainerForItem(inv.getStorage(), WATER_RING_ITEM_ID);
-    }
-
-    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container,
-            String itemId) {
-        if (container == null)
-            return false;
-
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack stack = container.getItemStack(i);
-            if (stack != null && !stack.isEmpty()) {
-                if (itemId.equals(stack.getItemId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return RingUtils.hasRing(player, WATER_RING_ITEM_ID);
     }
 
     public Set<UUID> getWaterImmunePlayers() {

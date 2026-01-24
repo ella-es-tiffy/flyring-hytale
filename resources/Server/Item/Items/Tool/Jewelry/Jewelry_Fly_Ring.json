@@ -3,6 +3,7 @@
         "Name": "items.Jewelry_Fly_Ring.name",
         "Description": "items.Jewelry_Fly_Ring.description"
     },
+    "MaxStackSize": 1,
     "Categories": [
         "Tool.Misc"
     ],

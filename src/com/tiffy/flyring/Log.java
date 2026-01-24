@@ -8,9 +8,8 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 public class Log {
 
     public static void info(JavaPlugin plugin, String message) {
-        if (ModConfig.getInstance() != null && ModConfig.getInstance().debugLogging) {
-            plugin.getLogger().atInfo().log(message);
-        }
+        // Force enabled for troubleshooting flight reset bug
+        plugin.getLogger().atInfo().log(message);
     }
 
     public static void severe(JavaPlugin plugin, String message) {

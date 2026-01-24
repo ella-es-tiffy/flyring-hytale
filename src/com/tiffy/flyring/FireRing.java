@@ -93,29 +93,7 @@ public class FireRing {
     }
 
     private boolean hasRingInInventory(Player player) {
-        Inventory inv = player.getInventory();
-        if (inv == null) {
-            return false;
-        }
-
-        return checkContainerForItem(inv.getHotbar(), FIRE_RING_ITEM_ID) ||
-                checkContainerForItem(inv.getStorage(), FIRE_RING_ITEM_ID);
-    }
-
-    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container,
-            String itemId) {
-        if (container == null)
-            return false;
-
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack stack = container.getItemStack(i);
-            if (stack != null && !stack.isEmpty()) {
-                if (itemId.equals(stack.getItemId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return RingUtils.hasRing(player, FIRE_RING_ITEM_ID);
     }
 
     public boolean isFireImmune(UUID playerUuid) {

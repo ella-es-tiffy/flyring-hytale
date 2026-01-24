@@ -79,40 +79,18 @@ public class HealRing {
 
             healRingPlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
-                    .raw("[HealRing] You feel a surge of life-force! High-speed recovery enabled."));
-            Log.info(plugin, "[HealRing] " + player.getPlayerRef().getUsername() + " equipped heal ring");
+                    .raw("[Vampire Ring] You feel a surge of life-force! Lifesteal enabled."));
+            Log.info(plugin, "[Vampire Ring] " + player.getPlayerRef().getUsername() + " equipped vampire ring");
         } else if (!hasHealRing && wasWearing) {
             healRingPlayers.remove(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
-                    .raw("[HealRing] The life-force fades... recovery back to normal."));
-            Log.info(plugin, "[HealRing] " + player.getPlayerRef().getUsername() + " removed heal ring");
+                    .raw("[Vampire Ring] The thirst for blood fades... lifesteal disabled."));
+            Log.info(plugin, "[Vampire Ring] " + player.getPlayerRef().getUsername() + " removed vampire ring");
         }
     }
 
     private boolean hasRingInInventory(Player player) {
-        Inventory inv = player.getInventory();
-        if (inv == null) {
-            return false;
-        }
-
-        return checkContainerForItem(inv.getHotbar(), HEAL_RING_ITEM_ID) ||
-                checkContainerForItem(inv.getStorage(), HEAL_RING_ITEM_ID);
-    }
-
-    private boolean checkContainerForItem(com.hypixel.hytale.server.core.inventory.container.ItemContainer container,
-            String itemId) {
-        if (container == null)
-            return false;
-
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack stack = container.getItemStack(i);
-            if (stack != null && !stack.isEmpty()) {
-                if (itemId.equals(stack.getItemId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return RingUtils.hasRing(player, HEAL_RING_ITEM_ID);
     }
 
     public Set<UUID> getHealRingPlayers() {
