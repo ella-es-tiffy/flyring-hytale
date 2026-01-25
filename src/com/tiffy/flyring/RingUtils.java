@@ -33,9 +33,10 @@ public class RingUtils {
         if (checkContainer(inv.getStorage(), ringId))
             return true;
 
-        // Check backpack
+        // Check backpack (per-player setting)
         try {
-            if (checkContainer(inv.getBackpack(), ringId))
+            java.util.UUID uuid = player.getPlayerRef().getUuid();
+            if (PlayerSettings.isBackpackEnabled(uuid) && checkContainer(inv.getBackpack(), ringId))
                 return true;
         } catch (Throwable ignored) {
             // Some entities might not have a backpack

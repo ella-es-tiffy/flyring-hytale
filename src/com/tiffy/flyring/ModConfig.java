@@ -34,6 +34,7 @@ public class ModConfig {
         public RingEnabled craftable = new RingEnabled();
         public GameplayValues gameplay = new GameplayValues();
         public boolean debugLogging = false; // Toggle for mod-specific debug logs
+        public boolean backpackEnabled = true; // Controls if rings work in backpacks
         public List<RecipeOverride> recipeOverrides = new ArrayList<>();
     }
 
@@ -76,11 +77,15 @@ public class ModConfig {
         }
     }
 
-    private static final String CONFIG_DIR = "mods/tiffy";
+    private static final String CONFIG_DIR = "mods/tiffy-illegalrings";
+    private static final String OLD_CONFIG_DIR = "mods/tiffy"; // Migration
     private static final String CONFIG_FILE = "config.json";
     private static Config instance;
 
     public static Config load(File gameDirectory) {
+        // Migration: Move old config to new location
+        migrateOldConfig(gameDirectory);
+
         if (instance != null) {
             return instance;
         }
@@ -232,5 +237,36 @@ public class ModConfig {
 
     public static Config getInstance() {
         return instance;
+    }
+
+    /**
+     * Migrate old config from mods/tiffy to mods/tiffy-illegalrings
+     */
+    private static void migrateOldConfig(File gameDirectory) {
+        File oldConfigDir = new File(gameDirectory, OLD_CONFIG_DIR);
+        File oldConfigFile = new File(oldConfigDir, CONFIG_FILE);
+
+        if (!oldConfigFile.exists()) return; // Nothing to migrate
+
+        File newConfigDir = new File(gameDirectory, CONFIG_DIR);
+        File newConfigFile = new File(newConfigDir, CONFIG_FILE);
+
+        // Only migrate if new config doesn't exist yet
+        if (newConfigFile.exists()) return;
+
+        try {
+            if (!newConfigDir.exists()) newConfigDir.mkdirs();
+
+            // Copy old config to new location
+            java.nio.file.Files.copy(
+                oldConfigFile.toPath(),
+                newConfigFile.toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING
+            );
+
+            System.out.println("[ModConfig] Migrated config from " + OLD_CONFIG_DIR + " to " + CONFIG_DIR);
+        } catch (IOException e) {
+            System.err.println("[ModConfig] Migration failed: " + e.getMessage());
+        }
     }
 }

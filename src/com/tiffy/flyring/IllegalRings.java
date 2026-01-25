@@ -38,7 +38,9 @@ public class IllegalRings extends JavaPlugin {
 
         // Load mod config
         try {
-            ModConfig.load(new File(".").getAbsoluteFile());
+            File gameDir = new File(".").getAbsoluteFile();
+            ModConfig.load(gameDir);
+            PlayerSettings.load(gameDir);
             Log.setup(this, "[IllegalRings] Config loaded successfully!");
 
             // Log config values
@@ -55,11 +57,19 @@ public class IllegalRings extends JavaPlugin {
         }
 
         // Initialize ring handlers
-        flyRingHandler = new FlyRing(this, false);
+        flyRingHandler = new FlyRing(this, true);  // true = setup() will be called
         fireRingHandler = new FireRing(this, false);
         waterRingHandler = new WaterRing(this, false);
         healRingHandler = new HealRing(this, false);
         peacefulRingHandler = new PeacefullRing(this, false);
+
+        // Register Command properly via HytaleServer CommandManager
+        try {
+            com.hypixel.hytale.server.core.HytaleServer.get().getCommandManager()
+                    .register(new BackpackToggleCommand(flyRingHandler));
+        } catch (Exception e) {
+            Log.severe(this, "Failed to register FlyRing command: " + e.getMessage());
+        }
 
         // Centralized event registration
         getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, this::onInventoryChange);
@@ -143,5 +153,41 @@ public class IllegalRings extends JavaPlugin {
             healRingHandler.shutdown();
         scheduler.shutdown();
         Log.setup(this, "IllegalRings Mod shut down.");
+    }
+
+    private static class BackpackToggleCommand extends com.hypixel.hytale.server.core.command.system.AbstractCommand {
+        private final FlyRing flyRingHandler;
+
+        public BackpackToggleCommand(FlyRing flyRingHandler) {
+            super("frbackpack", "Toggle backpack ring detection (per player)");
+            this.flyRingHandler = flyRingHandler;
+        }
+
+        @Override
+        protected java.util.concurrent.CompletableFuture<Void> execute(
+                com.hypixel.hytale.server.core.command.system.CommandContext context) {
+            try {
+                java.util.UUID uuid = context.sender().getUuid();
+                boolean newState = PlayerSettings.toggleBackpack(uuid);
+
+                String state = newState ? "§aENABLED" : "§cDISABLED";
+                context.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("§6[FlyRing]§f Backpack ring detection: " + state));
+
+                // Refresh flight status
+                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = com.hypixel.hytale.server.core.universe.Universe
+                        .get().getPlayer(uuid);
+                if (playerRef != null) {
+                    Player player = playerRef.getComponent(Player.getComponentType());
+                    if (player != null) {
+                        flyRingHandler.updateFlightStatus(player);
+                    }
+                }
+            } catch (Exception e) {
+                context.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("§c[FlyRing] Error: " + e.getMessage()));
+            }
+            return java.util.concurrent.CompletableFuture.completedFuture(null);
+        }
     }
 }

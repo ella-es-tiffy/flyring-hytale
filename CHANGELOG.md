@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.3.86 - 2026-01-25
+
+### FlyRing - Flight System Overhaul
+- **Fixed**: Flight now properly restores after dismounting/sitting/sleeping
+- **Fixed**: Client-side prediction no longer ignores server flight state
+- **Changed**: `movement.update()` now always sent when ring equipped (forces client sync)
+- **Changed**: Heartbeat interval reduced from 2s to 1s for faster recovery
+
+### Backpack Settings - Per-Player Toggle
+- **New Command**: `/frbackpack` - toggles backpack ring detection per player
+- **New File**: `PlayerSettings.java` - persistent per-player settings (CSV format)
+- **Changed**: Backpack setting is now per-player instead of global
+- **Default**: Backpack enabled (rings in backpack count as equipped)
+- **Applies to**: All rings (Fly, Fire, Water, Heal, Peaceful)
+
+### Config Migration
+- **Changed**: Config folder moved from `mods/tiffy` to `mods/tiffy-illegalrings`
+- **Added**: Automatic migration of existing configs (preserves custom recipes!)
+- **Files migrated**:
+  - `config.json` (recipes, gameplay values, ring toggles)
+  - `player_settings.csv` (per-player backpack settings)
+
+### Technical
+- Heartbeat uses `ScheduledExecutorService` at 1000ms interval
+- Thread-safe player tracking with `ConcurrentHashMap.newKeySet()`
+- `world.execute()` wrapper for safe component access from scheduler thread
+- Snapshot-based iteration to prevent race conditions with PlayerDisconnect
+
+---
+
 ## v0.3.20 - 2026-01-24
 - **Peaceful Ring Polish**:
   - **Interaction Fix**: Changed AI attitude from `IGNORE` to `FRIENDLY`. This restores interaction prompts (like 'F' to talk), enabling trading and questing while equipped.
