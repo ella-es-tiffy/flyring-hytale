@@ -10,8 +10,11 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 
 import java.util.UUID;
+import java.awt.Color;
 import java.util.Set;
+import java.awt.Color;
 import java.util.concurrent.ConcurrentHashMap;
+import java.awt.Color;
 
 /**
  * PeacefullRing - Handler for the Peaceful Ring.
@@ -67,10 +70,22 @@ public class PeacefullRing {
 
         if (hasRing) {
             if (peacefulPlayers.add(uuid)) {
+                // Check if Ring is disabled
+                if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
+                        && !ModConfig.getInstance().enabled.peacefulRing) {
+                    player.sendMessage(com.hypixel.hytale.server.core.Message
+                            .raw("[PeacefulRing] DISABLED by server").color(Color.RED));
+                    return;
+                }
+
+                player.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("[PeacefulRing] A soothing aura surrounds you... creatures will ignore you.").color(Color.ORANGE));
                 Log.info(plugin, "[PeacefullRing] " + player.getPlayerRef().getUsername() + " equipped peaceful ring");
             }
         } else {
             if (peacefulPlayers.remove(uuid)) {
+                player.sendMessage(com.hypixel.hytale.server.core.Message
+                        .raw("[PeacefulRing] The soothing aura fades. Monsters are aggressive again.").color(Color.ORANGE).color(Color.RED));
                 Log.info(plugin, "[PeacefullRing] " + player.getPlayerRef().getUsername() + " removed peaceful ring");
             }
         }

@@ -8,8 +8,11 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import java.util.Set;
+import java.awt.Color;
 import java.util.UUID;
+import java.awt.Color;
 import java.util.concurrent.ConcurrentHashMap;
+import java.awt.Color;
 
 /**
  * HealRing - Handler for the Heal Ring.
@@ -73,19 +76,19 @@ public class HealRing {
             if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
                     && !ModConfig.getInstance().enabled.healRing) {
                 player.sendMessage(com.hypixel.hytale.server.core.Message
-                        .raw("§c[HealRing] DISABLED by server"));
+                        .raw("[HealRing] DISABLED by server").color(Color.RED));
                 return;
             }
 
             healRingPlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
-                    .raw("[Vampire Ring] You feel a surge of life-force! Lifesteal enabled."));
-            Log.info(plugin, "[Vampire Ring] " + player.getPlayerRef().getUsername() + " equipped vampire ring");
+                    .raw("[HealRing] You feel a surge of life-force! Lifesteal enabled.").color(Color.ORANGE));
+            Log.info(plugin, "[HealRing] " + player.getPlayerRef().getUsername() + " equipped heal ring");
         } else if (!hasHealRing && wasWearing) {
             healRingPlayers.remove(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
-                    .raw("[Vampire Ring] The thirst for blood fades... lifesteal disabled."));
-            Log.info(plugin, "[Vampire Ring] " + player.getPlayerRef().getUsername() + " removed vampire ring");
+                    .raw("[HealRing] The thirst for blood fades... lifesteal disabled.").color(Color.ORANGE).color(Color.RED));
+            Log.info(plugin, "[HealRing] " + player.getPlayerRef().getUsername() + " removed heal ring");
         }
     }
 

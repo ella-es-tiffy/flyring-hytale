@@ -13,8 +13,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.concurrent.Executors;
+import java.awt.Color;
 import java.util.concurrent.ScheduledExecutorService;
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;
+import java.awt.Color;
 
 /**
  * IllegalRings - Main wrapper that orchestrates all ring handlers.
@@ -170,9 +173,9 @@ public class IllegalRings extends JavaPlugin {
                 java.util.UUID uuid = context.sender().getUuid();
                 boolean newState = PlayerSettings.toggleBackpack(uuid);
 
-                String state = newState ? "§aENABLED" : "§cDISABLED";
+                String state = newState ? "&aENABLED" : "&cDISABLED";
                 context.sendMessage(com.hypixel.hytale.server.core.Message
-                        .raw("§6[FlyRing]§f Backpack ring detection: " + state));
+                        .raw("&6[FlyRing]&f Backpack ring detection: " + state));
 
                 // Refresh flight status
                 com.hypixel.hytale.server.core.universe.PlayerRef playerRef = com.hypixel.hytale.server.core.universe.Universe
@@ -185,7 +188,7 @@ public class IllegalRings extends JavaPlugin {
                 }
             } catch (Exception e) {
                 context.sendMessage(com.hypixel.hytale.server.core.Message
-                        .raw("§c[FlyRing] Error: " + e.getMessage()));
+                        .raw("&c[FlyRing] Error: " + e.getMessage()));
             }
             return java.util.concurrent.CompletableFuture.completedFuture(null);
         }

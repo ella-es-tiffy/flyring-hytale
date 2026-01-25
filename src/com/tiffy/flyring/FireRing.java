@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.awt.Color;
 
 /**
  * FireRing - Handler for the Fire Ring.
@@ -74,19 +75,19 @@ public class FireRing {
             if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
                     && !ModConfig.getInstance().enabled.fireRing) {
                 player.sendMessage(com.hypixel.hytale.server.core.Message
-                        .raw("§c[FireRing] DISABLED by server"));
+                        .raw("[FireRing] DISABLED by server").color(Color.RED));
                 return;
             }
 
             fireImmunePlayers.add(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
-                    .raw("[FireRing] The ring glows with heat... you're immune to fire!"));
+                    .raw("[FireRing] The ring glows with heat... you're immune to fire!").color(Color.ORANGE));
             Log.info(plugin,
                     "[FireRing] " + player.getPlayerRef().getUsername() + " equipped fire ring (immunity enabled)");
         } else if (!hasFireRing && wasImmune) {
             fireImmunePlayers.remove(uuid);
             player.sendMessage(com.hypixel.hytale.server.core.Message
-                    .raw("[FireRing] The flame fades. You're vulnerable again."));
+                    .raw("[FireRing] The flame fades. You're vulnerable again.").color(Color.ORANGE));
             Log.info(plugin,
                     "[FireRing] " + player.getPlayerRef().getUsername() + " removed fire ring (immunity disabled)");
         }

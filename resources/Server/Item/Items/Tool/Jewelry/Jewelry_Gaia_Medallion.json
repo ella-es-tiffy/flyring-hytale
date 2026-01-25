@@ -1,14 +1,14 @@
 {
-    "Id": "Jewelry_Heal_Ring",
+    "Id": "Jewelry_Gaia_Medallion",
     "TranslationProperties": {
-        "Name": "items.Jewelry_Heal_Ring.name",
-        "Description": "items.Jewelry_Heal_Ring.description"
+        "Name": "items.Jewelry_Gaia_Medallion.name",
+        "Description": "items.Jewelry_Gaia_Medallion.description"
     },
     "MaxStackSize": 1,
     "Categories": [
         "Tool.Misc"
     ],
-    "Icon": "Icons/Items/Jewelry_Heal_Ring.png",
+    "Icon": "Icons/Items/Jewelry_Gaia_Medallion.png",
     "IconProperties": {
         "Rotation": [
             22.5,
@@ -17,7 +17,7 @@
         ],
         "Scale": 0.8
     },
-    "Rarity": "Mythic",
+    "Rarity": "Legendary",
     "Tags": {
         "Type": [
             "Tool"
@@ -26,20 +26,24 @@
     "Recipe": {
         "Input": [
             {
-                "ItemId": "Ingredient_Bar_Iron",
-                "Quantity": 300
+                "ItemId": "Jewelry_Fly_Ring",
+                "Quantity": 1
             },
             {
-                "ItemId": "Ingredient_Life_Essence",
-                "Quantity": 100
+                "ItemId": "Jewelry_Fire_Ring",
+                "Quantity": 1
             },
             {
-                "ItemId": "Ingredient_Bar_Thorium",
-                "Quantity": 30
+                "ItemId": "Jewelry_Water_Ring",
+                "Quantity": 1
             },
             {
-                "ItemId": "Ingredient_Bar_Cobalt",
-                "Quantity": 30
+                "ItemId": "Jewelry_Heal_Ring",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Jewelry_Peacefull_Ring",
+                "Quantity": 1
             }
         ],
         "BenchRequirement": [

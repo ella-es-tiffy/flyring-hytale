@@ -1,5 +1,53 @@
 # Changelog
 
+
+
+## v0.3.96 - 2026-01-25
+
+### Color Codes Fixed (Proper Hytale API)
+- **Fixed**: All chat messages now use proper Hytale Message API
+  - Changed from invalid `&c`/`§c` codes to `.color(Color.RED)`, etc.
+  - Now matches IllegalPipe's working implementation
+  - Red: `Color.RED`
+  - Orange: `Color.ORANGE`
+  - Green: `Color.GREEN`
+- **All affected files updated**: FireRing, WaterRing, HealRing, PeacefulRing, FlyRing
+
+## v0.3.95 - 2026-01-25
+
+### Jewelry Icons & Formatting Fixes
+- **Fixed**: Item preview icons now display in crafting UI
+  - Moved PNGs from `ItemsGenerated/` to `Items/` directory
+  - Updated icon paths in all item JSONs
+  - Applied proper rotation and scale (0.8)
+- **Fixed**: Color codes changed from `§` to `&` for proper formatting
+  - All ring and medallion chat messages now properly colored
+  - Red (`&c`), Gold (`&6`), Green (`&a`), White (`&f`)
+
+## v0.3.94 - 2026-01-25
+- Removed duplicate ItemsGenerated icon folder to fix JAR bloat
+
+## v0.3.93 - 2026-01-25
+- Fixed icon visibility in crafting recipes
+
+## v0.3.92 - 2026-01-25
+- Fixed icon properties (removed Translation offset)
+
+## v0.3.91 - 2026-01-25
+
+### Gaia Medallion - Fixed Recipe
+- **New Item**: `Jewelry_Gaia_Medallion` - Ultimate crafting material combining all 5 rings
+- **Fixed Recipe**: Gaia Medallion recipe is now **hardcoded and not configurable**
+- **Recipe Requirements**:
+  - 1x Jewelry_Fly_Ring
+  - 1x Jewelry_Fire_Ring
+  - 1x Jewelry_Water_Ring
+  - 1x Jewelry_Heal_Ring
+  - 1x Jewelry_Peacefull_Ring
+- **Workbench**: Workbench_Tinkering required
+
+---
+
 ## v0.3.86 - 2026-01-25
 
 ### FlyRing - Flight System Overhaul

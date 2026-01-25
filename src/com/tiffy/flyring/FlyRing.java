@@ -14,13 +14,21 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.Message;
 
 import java.util.UUID;
+import java.awt.Color;
 import java.util.Set;
+import java.awt.Color;
 import java.util.ArrayList;
+import java.awt.Color;
 import java.util.List;
+import java.awt.Color;
 import java.util.concurrent.ConcurrentHashMap;
+import java.awt.Color;
 import java.util.concurrent.ScheduledExecutorService;
+import java.awt.Color;
 import java.util.concurrent.Executors;
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;
+import java.awt.Color;
 
 /**
  * FlyRing - Handler for the Fly Ring (Creative flight).
@@ -89,7 +97,8 @@ public class FlyRing {
      */
     private void refreshFlightIfNeeded() {
         List<Player> playersSnapshot = new ArrayList<>(onlinePlayers);
-        if (playersSnapshot.isEmpty()) return;
+        if (playersSnapshot.isEmpty())
+            return;
 
         for (Player player : playersSnapshot) {
             try {
@@ -99,7 +108,8 @@ public class FlyRing {
                 }
 
                 World world = player.getWorld();
-                if (world == null || !world.isAlive()) continue;
+                if (world == null || !world.isAlive())
+                    continue;
 
                 world.execute(() -> {
                     try {
@@ -139,10 +149,12 @@ public class FlyRing {
 
         try {
             MovementManager movement = player.getPlayerRef().getComponent(MovementManager.getComponentType());
-            if (movement == null) return;
+            if (movement == null)
+                return;
 
             MovementSettings settings = movement.getSettings();
-            if (settings == null) return;
+            if (settings == null)
+                return;
 
             if (enabled) {
                 // Enable flight - IMMER update senden, Client könnte out of sync sein
@@ -197,7 +209,7 @@ public class FlyRing {
                     }
 
                     trackedFlightPlayers.remove(uuid);
-                    player.sendMessage(Message.raw("§6[FlyRing]§c Flight revoked."));
+                    player.sendMessage(Message.raw("[FlyRing] Flight revoked."));
                 }
             }
         } catch (Exception e) {

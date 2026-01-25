@@ -22,6 +22,7 @@ public class ModConfig {
         public boolean waterRing = true;
         public boolean healRing = true;
         public boolean peacefulRing = true;
+        public boolean gaiaMedallion = true;
     }
 
     public static class GameplayValues {
@@ -165,6 +166,14 @@ public class ModConfig {
                 new Ingredient("Ingredient_Life_Essence", 10),
                 new Ingredient("Ingredient_Fibre", 100),
                 new Ingredient("Plant_Fruit_Apple", 10));
+
+        // Gaia Medallion - combines all 5 rings
+        modified |= ensureRingInConfig(config, "Jewelry_Gaia_Medallion",
+                new Ingredient("Jewelry_Fly_Ring", 1),
+                new Ingredient("Jewelry_Fire_Ring", 1),
+                new Ingredient("Jewelry_Water_Ring", 1),
+                new Ingredient("Jewelry_Heal_Ring", 1),
+                new Ingredient("Jewelry_Peacefull_Ring", 1));
 
         return modified;
     }

@@ -10,6 +10,8 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
  */
 public class RingUtils {
 
+    private static final String GAIA_MEDALLION_ID = "Jewelry_Gaia_Medallion";
+
     /**
      * Checks if the player has the specified ring in any of their inventory
      * containers
@@ -26,6 +28,10 @@ public class RingUtils {
         Inventory inv = player.getInventory();
         if (inv == null)
             return false;
+
+        // Gaia Medallion = All rings active
+        if (hasItem(player, inv, GAIA_MEDALLION_ID))
+            return true;
 
         // Check all standard containers
         if (checkContainer(inv.getHotbar(), ringId))
@@ -74,6 +80,34 @@ public class RingUtils {
                 }
             }
         }
+        return false;
+    }
+
+    /**
+     * Check if player has a specific item (used for Gaia Medallion check)
+     */
+    private static boolean hasItem(Player player, Inventory inv, String itemId) {
+        // Check all containers
+        if (checkContainer(inv.getHotbar(), itemId)) return true;
+        if (checkContainer(inv.getStorage(), itemId)) return true;
+
+        // Backpack (per-player setting)
+        try {
+            java.util.UUID uuid = player.getPlayerRef().getUuid();
+            if (PlayerSettings.isBackpackEnabled(uuid) && checkContainer(inv.getBackpack(), itemId))
+                return true;
+        } catch (Throwable ignored) {}
+
+        // Armor/Jewelry
+        try {
+            if (checkContainer(inv.getArmor(), itemId)) return true;
+        } catch (Throwable ignored) {}
+
+        // Utility
+        try {
+            if (checkContainer(inv.getUtility(), itemId)) return true;
+        } catch (Throwable ignored) {}
+
         return false;
     }
 }

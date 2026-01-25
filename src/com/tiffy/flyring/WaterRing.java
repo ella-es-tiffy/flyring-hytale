@@ -8,8 +8,11 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import java.util.Set;
+import java.awt.Color;
 import java.util.UUID;
+import java.awt.Color;
 import java.util.concurrent.ConcurrentHashMap;
+import java.awt.Color;
 
 /**
  * WaterRing - Handler for the Water Ring.
@@ -74,7 +77,7 @@ public class WaterRing {
             if (ModConfig.getInstance() != null && ModConfig.getInstance().enabled != null
                     && !ModConfig.getInstance().enabled.waterRing) {
                 player.sendMessage(com.hypixel.hytale.server.core.Message
-                        .raw("§c[WaterRing] DISABLED by server"));
+                        .raw("[WaterRing] DISABLED by server").color(Color.RED));
                 return;
             }
 
