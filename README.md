@@ -1,3 +1,4 @@
+https://cf.huiu.net/flyrring_docs/index.html#01_Introduction
 # 💍 Illegal Rings: Rules Were Meant to be Broken
 
 ![Header](https://media.forgecdn.net/attachments/description/1432149/description_e13f7659-d32e-458e-b370-d836c6bf1dae.png)
