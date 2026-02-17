@@ -1,0 +1,59 @@
+{
+    "Id": "Jewelry_Heal_Ring",
+    "TranslationProperties": {
+        "Name": "server.items.Jewelry_Heal_Ring.name",
+        "Description": "server.items.Jewelry_Heal_Ring.description"
+    },
+    "MaxStackSize": 1,
+    "Categories": [
+        "Tool.Misc"
+    ],
+    "Icon": "Icons/Items/Jewelry_Heal_Ring.png",
+    "IconProperties": {
+        "Rotation": [
+            22.5,
+            45,
+            22.5
+        ],
+        "Scale": 0.8
+    },
+    "Model": "Resources/Ring_Display/Ring_Display.blockymodel",
+    "Texture": "Resources/Ring_Display/Textures/Heal_Ring.png",
+    "Scale": 0.5,
+    "Quality": "Epic",
+    "Tags": {
+        "Type": [
+            "Tool"
+        ]
+    },
+    "Tool": {},
+    "Recipe": {
+        "Input": [
+            {
+                "ItemId": "Ingredient_Bar_Iron",
+                "Quantity": 300
+            },
+            {
+                "ItemId": "Ingredient_Life_Essence",
+                "Quantity": 100
+            },
+            {
+                "ItemId": "Ingredient_Bar_Thorium",
+                "Quantity": 30
+            },
+            {
+                "ItemId": "Ingredient_Bar_Cobalt",
+                "Quantity": 30
+            }
+        ],
+        "BenchRequirement": [
+            {
+                "Id": "Workbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Tinkering"
+                ]
+            }
+        ]
+    }
+}

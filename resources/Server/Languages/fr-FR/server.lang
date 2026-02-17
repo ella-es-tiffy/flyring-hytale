@@ -1,0 +1,20 @@
+items.Jewelry_Fly_Ring.name = Anneau de Vol
+items.Jewelry_Fly_Ring.description = Un anneau magique qui vous accorde le vol créatif.
+items.Jewelry_Fire_Ring.name = Anneau de Feu
+items.Jewelry_Fire_Ring.description = Un anneau ardent qui vous protège du feu.
+items.Jewelry_Water_Ring.name = Anneau d'Eau
+items.Jewelry_Water_Ring.description = Un anneau frais et humide qui vous empêche de vous noyer.
+items.Jewelry_Heal_Ring.name = Anneau de Vampire
+items.Jewelry_Heal_Ring.description = Un anneau sombre qui vous soigne d'une partie des dégâts que vous infligez.
+items.Jewelry_Peacefull_Ring.name = Anneau de Paix
+items.Jewelry_Peacefull_Ring.description = Les animaux et les monstres vous ignoreront tant que vous porterez cet anneau.
+items.Jewelry_Gaia_Medallion.name = Médaillon de Gaïa
+items.Jewelry_Gaia_Medallion.description = L'artefact ultime. Combine le pouvoir des cinq anneaux en un seul.
+
+items.Ring_Altar_Dark.name = Autel Sombre d'Anneau
+items.Ring_Altar_Dark.description = Un autel en pierre sombre pour lier un anneau.
+items.Ring_Altar_Light.name = Autel Lumineux d'Anneau
+items.Ring_Altar_Light.description = Un autel en pierre claire pour lier un anneau.
+
+barter.tiffy_merchant.title = Marché Noir
+npcRoles.Tiffy_Merchant.name = Tiffy

@@ -1,0 +1,13 @@
+bin/
+.DS_Store
+sources.txt
+.claude/
+.agent/
+.idea/
+*.iml
+*.jar
+.build_number
+.config_number
+build_log.txt
+security_best_practices_report.md
+src/com/tiffy/flyring/AnalyticsClient.java.real

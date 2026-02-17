@@ -1,0 +1,63 @@
+{
+    "Id": "Jewelry_Gaia_Medallion",
+    "TranslationProperties": {
+        "Name": "server.items.Jewelry_Gaia_Medallion.name",
+        "Description": "server.items.Jewelry_Gaia_Medallion.description"
+    },
+    "MaxStackSize": 1,
+    "Categories": [
+        "Tool.Misc"
+    ],
+    "Icon": "Icons/Items/Jewelry_Gaia_Medallion.png",
+    "IconProperties": {
+        "Rotation": [
+            22.5,
+            45,
+            22.5
+        ],
+        "Scale": 0.8
+    },
+    "Model": "Resources/Ring_Display/Ring_Display.blockymodel",
+    "Texture": "Resources/Ring_Display/Textures/Gaia_Medallion.png",
+    "Scale": 0.5,
+    "Quality": "Legendary",
+    "Tags": {
+        "Type": [
+            "Tool"
+        ]
+    },
+    "Tool": {},
+    "Recipe": {
+        "Input": [
+            {
+                "ItemId": "Jewelry_Fly_Ring",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Jewelry_Fire_Ring",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Jewelry_Water_Ring",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Jewelry_Heal_Ring",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Jewelry_Peacefull_Ring",
+                "Quantity": 1
+            }
+        ],
+        "BenchRequirement": [
+            {
+                "Id": "Workbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Tinkering"
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "Id": "Jewelry_Peacefull_Ring",
+    "TranslationProperties": {
+        "Name": "server.items.Jewelry_Peacefull_Ring.name",
+        "Description": "server.items.Jewelry_Peacefull_Ring.description"
+    },
+    "MaxStackSize": 1,
+    "Categories": [
+        "Tool.Misc"
+    ],
+    "Icon": "Icons/Items/Jewelry_Peacefull_Ring.png",
+    "IconProperties": {
+        "Rotation": [
+            22.5,
+            45,
+            22.5
+        ],
+        "Scale": 0.8
+    },
+    "Model": "Resources/Ring_Display/Ring_Display.blockymodel",
+    "Texture": "Resources/Ring_Display/Textures/Peacefull_Ring.png",
+    "Scale": 0.5,
+    "Quality": "Epic",
+    "Tags": {
+        "Type": [
+            "Tool"
+        ]
+    },
+    "Tool": {},
+    "Recipe": {
+        "Input": [
+            {
+                "ItemId": "Rock_Stone_Cobble",
+                "Quantity": 200
+            },
+            {
+                "ItemId": "Ingredient_Life_Essence",
+                "Quantity": 10
+            },
+            {
+                "ItemId": "Ingredient_Fibre",
+                "Quantity": 100
+            },
+            {
+                "ItemId": "Plant_Fruit_Apple",
+                "Quantity": 10
+            }
+        ],
+        "BenchRequirement": [
+            {
+                "Id": "Workbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Tinkering"
+                ]
+            }
+        ]
+    }
+}

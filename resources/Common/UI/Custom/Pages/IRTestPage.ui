@@ -1,0 +1,84 @@
+// IR Test Page - 6 Ring Enabled Checkboxes + Save
+
+$C = "../Common.ui";
+
+@HintLabel = Label {
+  Style: (FontSize: 11, TextColor: #6e7da1);
+  Anchor: (Top: 2, Bottom: 8);
+  Text: @Text;
+};
+
+@Separator = Group {
+  Anchor: (Height: 1, Top: 4, Bottom: 12);
+  Background: #5e512c;
+};
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@Container {
+    Anchor: (Width: 400, Height: 380);
+
+    #Title {
+      $C.@Title {
+        @Text = "IR Test - Save Checkboxes";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      FlexWeight: 1;
+
+      @HintLabel { @Text = "Toggle rings and press Save to test ValueChanged"; }
+
+      @Separator {}
+
+      // Fly Ring
+      Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+        $C.@CheckBox #TestFlyRing { Value: true; }
+        Label { Text: "Fly Ring Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+      }
+
+      // Fire Ring
+      Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+        $C.@CheckBox #TestFireRing { Value: true; }
+        Label { Text: "Fire Ring Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+      }
+
+      // Water Ring
+      Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+        $C.@CheckBox #TestWaterRing { Value: true; }
+        Label { Text: "Water Ring Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+      }
+
+      // Heal Ring
+      Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+        $C.@CheckBox #TestHealRing { Value: true; }
+        Label { Text: "Heal Ring Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+      }
+
+      // Peaceful Ring
+      Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+        $C.@CheckBox #TestPeacefulRing { Value: true; }
+        Label { Text: "Peaceful Ring Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+      }
+
+      // Gaia Medallion
+      Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+        $C.@CheckBox #TestGaiaMedallion { Value: true; }
+        Label { Text: "Gaia Medallion Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+      }
+
+      @Separator {}
+
+      // Status label
+      Label #TestStatus { Text: "Ready"; Anchor: (Height: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+
+      // Buttons
+      Group { LayoutMode: Left; Anchor: (Height: 50, Top: 8);
+        $C.@SecondaryTextButton #TestSave { @Text = "Save"; Anchor: (Width: 120, Height: 40); }
+        $C.@SecondaryTextButton #TestClose { @Text = "Close"; Anchor: (Width: 120, Height: 40, Left: 12); }
+      }
+    }
+  }
+}

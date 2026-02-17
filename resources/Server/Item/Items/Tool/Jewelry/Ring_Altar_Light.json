@@ -1,0 +1,92 @@
+{
+    "Id": "Ring_Altar_Light",
+    "TranslationProperties": {
+        "Name": "server.items.Ring_Altar_Light.name",
+        "Description": "server.items.Ring_Altar_Light.description"
+    },
+    "MaxStackSize": 1,
+    "Categories": [
+        "Tool.Misc"
+    ],
+    "Icon": "Icons/Items/Altar_Light_Icon.png",
+    "IconProperties": {
+        "Rotation": [
+            22.5,
+            45,
+            22.5
+        ],
+        "Scale": 0.8
+    },
+    "Quality": "Common",
+    "Tags": {
+        "Type": [
+            "Furniture"
+        ]
+    },
+    "PlayerAnimationsId": "Block",
+    "BlockType": {
+        "BlockParticleSetId": "Stone",
+        "BlockSoundSetId": "Stone",
+        "DrawType": "Cube",
+        "Textures": [
+            {
+                "Up": "BlockTextures/Altar_Light_Top_Off.png",
+                "Down": "BlockTextures/Altar_Light_Placeholder.png",
+                "North": "BlockTextures/Altar_Light_SideA_Off.png",
+                "South": "BlockTextures/Altar_Light_SideA_Off.png",
+                "East": "BlockTextures/Altar_Light_SideB_Off.png",
+                "West": "BlockTextures/Altar_Light_SideB_Off.png",
+                "Weight": 1
+            }
+        ],
+        "Flags": {
+            "IsUsable": true
+        },
+        "Gathering": {
+            "Breaking": {
+                "GatherType": "Rocks"
+            }
+        },
+        "Material": "Solid",
+        "Opacity": "Transparent",
+        "State": {
+            "Id": "container",
+            "Capacity": 1,
+            "Definitions": {
+                "CloseWindow": {
+                    "InteractionSoundEventId": "SFX_Chest_Wooden_Close"
+                },
+                "OpenWindow": {
+                    "InteractionSoundEventId": "SFX_Chest_Wooden_Open"
+                },
+                "Activated": {
+                    "Textures": [
+                        {
+                            "Up": "BlockTextures/Altar_Light_Top_On.png",
+                            "Down": "BlockTextures/Altar_Light_Placeholder.png",
+                            "North": "BlockTextures/Altar_Light_SideA_On.png",
+                            "South": "BlockTextures/Altar_Light_SideA_On.png",
+                            "East": "BlockTextures/Altar_Light_SideB_On.png",
+                            "West": "BlockTextures/Altar_Light_SideB_On.png",
+                            "Weight": 1
+                        }
+                    ],
+                    "Light": {
+                        "Color": "#099"
+                    }
+                }
+            }
+        },
+        "Support": {
+            "Down": [
+                {
+                    "FaceType": "Full"
+                }
+            ]
+        },
+        "Interactions": {
+            "Primary": "Break_Container",
+            "Use": "Open_Container"
+        }
+    }
+}

@@ -1,0 +1,20 @@
+items.Jewelry_Fly_Ring.name = Anillo de Vuelo
+items.Jewelry_Fly_Ring.description = Un anillo mágico que te otorga vuelo creativo.
+items.Jewelry_Fire_Ring.name = Anillo de Fuego
+items.Jewelry_Fire_Ring.description = Un anillo ardiente que te protege del fuego.
+items.Jewelry_Water_Ring.name = Anillo de Agua
+items.Jewelry_Water_Ring.description = Un anillo fresco y húmedo que te impide ahogarte.
+items.Jewelry_Heal_Ring.name = Anillo de Vampiro
+items.Jewelry_Heal_Ring.description = Un anillo oscuro que te cura por una porción del daño que infliges.
+items.Jewelry_Peacefull_Ring.name = Anillo de Paz
+items.Jewelry_Peacefull_Ring.description = Los animales y monstruos te ignorarán mientras lleves este anillo.
+items.Jewelry_Gaia_Medallion.name = Medallón de Gaia
+items.Jewelry_Gaia_Medallion.description = El artefacto definitivo. Combina el poder de los cinco anillos en uno.
+
+items.Ring_Altar_Dark.name = Altar Oscuro de Anillo
+items.Ring_Altar_Dark.description = Un altar de piedra oscura para vincular un anillo.
+items.Ring_Altar_Light.name = Altar Luminoso de Anillo
+items.Ring_Altar_Light.description = Un altar de piedra clara para vincular un anillo.
+
+barter.tiffy_merchant.title = Mercado Negro
+npcRoles.Tiffy_Merchant.name = Tiffy

@@ -1,0 +1,20 @@
+items.Jewelry_Fly_Ring.name = Fly Ring
+items.Jewelry_Fly_Ring.description = A magical ring that grants creative flight.
+items.Jewelry_Fire_Ring.name = Fire Ring
+items.Jewelry_Fire_Ring.description = A burning ring that protects from fire and ignites the air.
+items.Jewelry_Water_Ring.name = Water Ring
+items.Jewelry_Water_Ring.description = A cool, moist ring that prevents drowning.
+items.Jewelry_Heal_Ring.name = Vampire Ring
+items.Jewelry_Heal_Ring.description = A dark ring that heals you for a portion of the damage you deal.
+items.Jewelry_Peacefull_Ring.name = Peaceful Ring
+items.Jewelry_Peacefull_Ring.description = Animals and monsters will ignore you while wearing this ring.
+items.Jewelry_Gaia_Medallion.name = Gaia Medallion
+items.Jewelry_Gaia_Medallion.description = The ultimate artifact. Combines the power of all five rings into one.
+
+items.Ring_Altar_Dark.name = Dark Ring Altar
+items.Ring_Altar_Dark.description = A dark stone altar to bind a ring.
+items.Ring_Altar_Light.name = Light Ring Altar
+items.Ring_Altar_Light.description = A light stone altar to bind a ring.
+
+barter.tiffy_merchant.title = Black Market
+npcRoles.Tiffy_Merchant.name = Tiffy

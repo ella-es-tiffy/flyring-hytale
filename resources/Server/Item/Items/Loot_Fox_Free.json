@@ -1,0 +1,64 @@
+{
+  "Id": "Loot_Fox_Free",
+  "TranslationProperties": {
+    "Name": "Fox (3 Days)",
+    "Description": "A temporary fox companion. Expires after 3 days."
+  },
+  "PlayerAnimationsId": {
+    "Parent": "Wand"
+  },
+  "Categories": [
+    "Items.Potions"
+  ],
+  "Icon": "Icons/Items/LootFox.png",
+  "Model": "Resources/Item_Display/Item_Display.blockymodel",
+  "Texture": "Resources/Item_Display/Textures/LootFox.png",
+  "Interactions": {
+    "Secondary": {
+      "RequireNewClick": true,
+      "Interactions": [
+        {
+          "Type": "Charging",
+          "FailOnDamage": true,
+          "Effects": {
+            "ItemAnimationId": "Cast_Magic",
+            "ClearAnimationOnFinish": true
+          },
+          "HorizontalSpeedMultiplier": 0.6,
+          "Next": {
+            "0.5": {
+              "Type": "Replace",
+              "Var": "Effect",
+              "DefaultValue": {
+                "Interactions": [
+                  {
+                    "Type": "ApplyEffect",
+                    "EffectId": "Loot_Fox_Toggle"
+                  }
+                ]
+              }
+            }
+          },
+          "Failed": {
+            "Type": "Simple"
+          }
+        }
+      ]
+    }
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Loot_Fox_Toggle"
+        }
+      ]
+    }
+  },
+  "Consumable": true,
+  "MaxStack": 1,
+  "Scale": 0.5,
+  "Quality": "Rare",
+  "DropOnDeath": false
+}

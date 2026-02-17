@@ -1,0 +1,5 @@
+{
+    "OverlapBehavior": "Overwrite",
+    "Duration": 999999,
+    "StatusEffectIcon": "Icons/Items/LootSheep.png"
+}

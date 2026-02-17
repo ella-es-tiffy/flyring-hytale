@@ -1,0 +1,64 @@
+{
+    "Id": "Loot_Sheep_Summon",
+    "TranslationProperties": {
+        "Name": "Loot Sheep Summon",
+        "Description": "Summon or dismiss your Sheep Loot Buddy"
+    },
+    "PlayerAnimationsId": {
+        "Parent": "Wand"
+    },
+    "Categories": [
+        "Items.Potions"
+    ],
+    "Icon": "Icons/Items/LootSheep.png",
+    "Model": "Resources/Item_Display/Item_Display.blockymodel",
+    "Texture": "Resources/Item_Display/Textures/LootSheep.png",
+    "Interactions": {
+        "Secondary": {
+            "RequireNewClick": true,
+            "Interactions": [
+                {
+                    "Type": "Charging",
+                    "FailOnDamage": true,
+                    "Effects": {
+                        "ItemAnimationId": "Cast_Magic",
+                        "ClearAnimationOnFinish": true
+                    },
+                    "HorizontalSpeedMultiplier": 0.6,
+                    "Next": {
+                        "0.5": {
+                            "Type": "Replace",
+                            "Var": "Effect",
+                            "DefaultValue": {
+                                "Interactions": [
+                                    {
+                                        "Type": "ApplyEffect",
+                                        "EffectId": "Loot_Sheep_Toggle"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "Failed": {
+                        "Type": "Simple"
+                    }
+                }
+            ]
+        }
+    },
+    "InteractionVars": {
+        "Effect": {
+            "Interactions": [
+                {
+                    "Type": "ApplyEffect",
+                    "EffectId": "Loot_Sheep_Toggle"
+                }
+            ]
+        }
+    },
+    "Consumable": true,
+    "MaxStack": 1,
+    "Scale": 0.5,
+    "Quality": "Rare",
+    "DropOnDeath": false
+}

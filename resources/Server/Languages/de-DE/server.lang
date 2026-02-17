@@ -1,0 +1,20 @@
+items.Jewelry_Fly_Ring.name = Flugring
+items.Jewelry_Fly_Ring.description = Ein magischer Ring, der dir das Fliegen ermöglicht.
+items.Jewelry_Fire_Ring.name = Feuerring
+items.Jewelry_Fire_Ring.description = Ein brennender Ring, der dich vor Feuer schützt.
+items.Jewelry_Water_Ring.name = Wasserring
+items.Jewelry_Water_Ring.description = Ein Ring, der dich vor dem Ertrinken bewahrt.
+items.Jewelry_Heal_Ring.name = Vampirring
+items.Jewelry_Heal_Ring.description = Ein dunkler Ring, der dich für einen Teil des Schadens heilt, den du verursachst.
+items.Jewelry_Peacefull_Ring.name = Friedensring
+items.Jewelry_Peacefull_Ring.description = Tiere und Monster ignorieren dich, während du diesen Ring trägst.
+items.Jewelry_Gaia_Medallion.name = Gaia-Medaillon
+items.Jewelry_Gaia_Medallion.description = Das ultimative Artefakt. Vereint die Kraft aller fünf Ringe in einem.
+
+items.Ring_Altar_Dark.name = Dunkler Ringaltar
+items.Ring_Altar_Dark.description = Ein dunkler Steinaltar, um einen Ring zu binden.
+items.Ring_Altar_Light.name = Heller Ringaltar
+items.Ring_Altar_Light.description = Ein heller Steinaltar, um einen Ring zu binden.
+
+barter.tiffy_merchant.title = Schwarzmarkt
+npcRoles.Tiffy_Merchant.name = Tiffy

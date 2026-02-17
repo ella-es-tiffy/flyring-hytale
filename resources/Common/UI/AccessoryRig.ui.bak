@@ -1,0 +1,55 @@
+Group {
+  Anchor: (Width: 380, Height: 260);
+
+  Group {
+    Anchor: (Full: 0);
+    Background: (Color: #141a24, Opacity: 0.95);
+    Border: (Color: #3DDCFF, Width: 1, Opacity: 0.5);
+    Padding: (All: 15);
+    LayoutMode: Top;
+
+    // Header
+    Group {
+      Anchor: (Height: 32);
+      LayoutMode: Left;
+      Label {
+        Text: "ACCESSORY RIG";
+        Style: (VerticalAlignment: Center, TextColor: #3DDCFF, FontSize: 18, Bold: true);
+      }
+    }
+
+    Group { Anchor: (Height: 12); }
+
+    // Content
+    Group {
+      FlexWeight: 1;
+      LayoutMode: Top;
+      
+      Label {
+        Text: "Carry up to 6 rings in your soul-bound rig:";
+        Style: (TextColor: #AAB3C2, FontSize: 13);
+      }
+      
+      Group { Anchor: (Height: 15); }
+      
+      // Slot Placeholder Area
+      Group #SlotGrid {
+         Anchor: (Width: 300, Height: 120);
+         LayoutMode: Center;
+         Background: (Color: #000000, Opacity: 0.2);
+         Border: (Color: #3DDCFF, Width: 1, Opacity: 0.1);
+      }
+    }
+
+    Group { Anchor: (Height: 10); }
+
+    // Footer
+    Group {
+      Anchor: (Height: 20);
+      Label {
+         Text: "Close UI to apply changes";
+         Style: (HorizontalAlignment: Center, TextColor: #5c6b82, FontSize: 10);
+      }
+    }
+  }
+}

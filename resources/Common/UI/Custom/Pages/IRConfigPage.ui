@@ -1,0 +1,662 @@
+// Illegal Rings - Admin Config Panel
+
+$C = "../Common.ui";
+
+@SectionTitle = Label {
+  Style: (FontSize: 14, TextColor: #ccb588, RenderUppercase: true, RenderBold: true);
+  Anchor: (Bottom: 10);
+  Text: @Text;
+};
+
+@HintLabel = Label {
+  Style: (FontSize: 11, TextColor: #6e7da1);
+  Anchor: (Top: 2, Bottom: 8);
+  Text: @Text;
+};
+
+@Separator = Group {
+  Anchor: (Height: 1, Top: 4, Bottom: 12);
+  Background: #5e512c;
+};
+
+// Craft slot row helper - IDs must be unique top-level, placed directly on children
+
+// Main page overlay
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@Container {
+    Anchor: (Width: 650, Height: 700);
+
+    #Title {
+      $C.@Title #ConfigTitle {
+        @Text = "Illegal Rings - Config";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+
+      // ========== TAB BUTTONS ==========
+      Group {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        $C.@SecondaryTextButton #TabGeneral {
+          Text: "General";
+          FlexWeight: 1;
+        }
+
+        Group { Anchor: (Width: 5); }
+
+        $C.@SecondaryTextButton #TabCraft {
+          Text: "Craft";
+          FlexWeight: 1;
+        }
+
+        Group { Anchor: (Width: 5); }
+
+        $C.@SecondaryTextButton #TabLoot {
+          Text: "Loot";
+          FlexWeight: 1;
+        }
+      }
+
+      // ========== TAB: GENERAL ==========
+      Group #GeneralContent {
+        Visible: true;
+        FlexWeight: 1;
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+        // --- Rings Enabled ---
+        @SectionTitle { @Text = "Rings Enabled"; }
+        @HintLabel { @Text = "Toggle which rings are active on the server"; }
+
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #EnabledFlyRing { Value: true; }
+          Label { Text: "Fly Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #EnabledFireRing { Value: true; }
+          Label { Text: "Fire Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #EnabledWaterRing { Value: true; }
+          Label { Text: "Water Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #EnabledHealRing { Value: true; }
+          Label { Text: "Heal Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #EnabledPeacefulRing { Value: true; }
+          Label { Text: "Peaceful Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #EnabledGaiaMedallion { Value: true; }
+          Label { Text: "Gaia Medallion"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+
+        @Separator {}
+
+        // --- Rings Craftable ---
+        @SectionTitle { @Text = "Rings Craftable"; }
+        @HintLabel { @Text = "Toggle which rings can be crafted at workbenches"; }
+
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #CraftableFlyRing { Value: false; }
+          Label { Text: "Fly Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #CraftableFireRing { Value: false; }
+          Label { Text: "Fire Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #CraftableWaterRing { Value: false; }
+          Label { Text: "Water Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #CraftableHealRing { Value: false; }
+          Label { Text: "Heal Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #CraftablePeacefulRing { Value: false; }
+          Label { Text: "Peaceful Ring"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #CraftableGaiaMedallion { Value: false; }
+          Label { Text: "Gaia Medallion"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+
+        @Separator {}
+
+        // --- Gameplay ---
+        @SectionTitle { @Text = "Gameplay"; }
+
+        Group {
+          LayoutMode: Left; Anchor: (Height: 24, Bottom: 8);
+          Label { Text: "Lifesteal %"; Anchor: (Width: 120); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+          FloatSlider #LifestealSlider {
+            Anchor: (Left: 10, Width: 180, Height: 5);
+            Style: $C.@DefaultSliderStyle;
+            Min: 0.0; Max: 1.0; Step: 0.01; Value: 0.05;
+          }
+          Label #LifestealValue { Text: "5%"; Anchor: (Width: 50, Left: 8); Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center, HorizontalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #NightVisionEnabled { Value: true; }
+          Label { Text: "Night Vision Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "Trigger Item"; Anchor: (Width: 120); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+          $C.@DropdownBox #NightVisionTriggerItem { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+        }
+
+        @Separator {}
+
+        // --- General ---
+        @SectionTitle { @Text = "General"; }
+
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #BackpackEnabled { Value: true; }
+          Label { Text: "Backpack Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #Notification { Value: true; }
+          Label { Text: "Update Notifications"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #SpawnTiffyNpc { Value: true; }
+          Label { Text: "Spawn Tiffy NPC"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #AnalyticsEnabled { Value: true; }
+          Label { Text: "Crash Analytics"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+
+        @Separator {}
+
+        // --- Free Pet ---
+        @SectionTitle { @Text = "Free Pet"; }
+
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #FreePetEnabled { Value: true; }
+          Label { Text: "Enable free Fox (3 Day) to new players"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+        @HintLabel { @Text = "Welcome message shown when granting pet. Use {time} for duration."; }
+        $C.@TextField #FreePetMessage { Anchor: (Height: 38, Bottom: 8); }
+        Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 4);
+          $C.@SecondaryTextButton #ResetFreePets { @Text = "Reset All Free Pets"; Anchor: (Width: 180, Height: 32); }
+          Label { Text: "Everyone gets it again on next login"; Anchor: (Left: 11); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+        }
+        Label #FreePetStatus { Text: ""; Anchor: (Height: 18); Style: (FontSize: 12, TextColor: #96a9be, VerticalAlignment: Center); }
+      }
+
+      // ========== TAB: CRAFT ==========
+      Group #CraftContent {
+        Visible: false;
+        FlexWeight: 1;
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+        @HintLabel { @Text = "Configure crafting recipes (max 4 ingredients per ring)"; }
+
+        // --- Fly Ring ---
+        @SectionTitle { @Text = "Fly Ring"; }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "1"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FlyDD1 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FlyQty1 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "2"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FlyDD2 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FlyQty2 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "3"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FlyDD3 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FlyQty3 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "4"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FlyDD4 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FlyQty4 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+
+        @Separator {}
+
+        // --- Fire Ring ---
+        @SectionTitle { @Text = "Fire Ring"; }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "1"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FireDD1 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FireQty1 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "2"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FireDD2 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FireQty2 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "3"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FireDD3 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FireQty3 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "4"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #FireDD4 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #FireQty4 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+
+        @Separator {}
+
+        // --- Water Ring ---
+        @SectionTitle { @Text = "Water Ring"; }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "1"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #WaterDD1 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #WaterQty1 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "2"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #WaterDD2 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #WaterQty2 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "3"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #WaterDD3 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #WaterQty3 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "4"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #WaterDD4 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #WaterQty4 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+
+        @Separator {}
+
+        // --- Heal Ring ---
+        @SectionTitle { @Text = "Heal Ring"; }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "1"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #HealDD1 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #HealQty1 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "2"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #HealDD2 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #HealQty2 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "3"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #HealDD3 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #HealQty3 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "4"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #HealDD4 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #HealQty4 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+
+        @Separator {}
+
+        // --- Peaceful Ring ---
+        @SectionTitle { @Text = "Peaceful Ring"; }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "1"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #PeaceDD1 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #PeaceQty1 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "2"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #PeaceDD2 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #PeaceQty2 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "3"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #PeaceDD3 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #PeaceQty3 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "4"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #PeaceDD4 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #PeaceQty4 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+
+        @Separator {}
+
+        // --- Gaia Medallion ---
+        @SectionTitle { @Text = "Gaia Medallion"; }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "1"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #GaiaDD1 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #GaiaQty1 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "2"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #GaiaDD2 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #GaiaQty2 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "3"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #GaiaDD3 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #GaiaQty3 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4);
+          Label { Text: "4"; Anchor: (Width: 20); Style: (FontSize: 12, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #GaiaDD4 { Anchor: (Width: 270, Height: $C.@DropdownBoxHeight); }
+          Label { Text: "x"; Anchor: (Width: 20, Left: 6); Style: (FontSize: 13, TextColor: #6e7da1, VerticalAlignment: Center, HorizontalAlignment: Center); }
+          $C.@NumberField #GaiaQty4 { @Anchor = (Width: 60); Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 1, MaxValue: 99999); Value: 1; }
+        }
+      }
+
+      // ========== TAB: LOOT ==========
+      Group #LootContent {
+        Visible: false;
+        FlexWeight: 1;
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+        @HintLabel { @Text = "NPC loot config - same NPC can drop multiple rings"; }
+
+        Group {
+          LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+          $C.@CheckBox #LootEnabled { Value: true; }
+          Label { Text: "Loot System Enabled"; Anchor: (Left: 11); Style: (FontSize: 14, TextColor: #b7cedd, VerticalAlignment: Center); }
+        }
+
+        @Separator {}
+
+        // Column headers
+        Group { LayoutMode: Left; Anchor: (Height: 18, Bottom: 4);
+          Label { Text: "#"; Anchor: (Width: 16); Style: (FontSize: 10, TextColor: #6e7da1, VerticalAlignment: Center); }
+          Label { Text: "NPC"; Anchor: (Width: 180, Left: 4); Style: (FontSize: 10, TextColor: #6e7da1, VerticalAlignment: Center); }
+          Label { Text: "Ring"; Anchor: (Width: 120, Left: 4); Style: (FontSize: 10, TextColor: #6e7da1, VerticalAlignment: Center); }
+          Label { Text: "Drop %"; Anchor: (Width: 60, Left: 4); Style: (FontSize: 10, TextColor: #6e7da1, VerticalAlignment: Center); }
+          Label { Text: "Frag %"; Anchor: (Width: 60, Left: 4); Style: (FontSize: 10, TextColor: #6e7da1, VerticalAlignment: Center); }
+          Label { Text: "Spawn"; Anchor: (Width: 50, Left: 4); Style: (FontSize: 10, TextColor: #6e7da1, VerticalAlignment: Center); }
+          Label { Text: ""; Anchor: (Width: 28, Left: 2); }
+        }
+
+        // --- Slot 1 ---
+        Group #LootRow1 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "1"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc1 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing1 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop1 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag1 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn1 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel1 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow2 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "2"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc2 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing2 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop2 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag2 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn2 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel2 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow3 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "3"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc3 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing3 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop3 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag3 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn3 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel3 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow4 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "4"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc4 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing4 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop4 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag4 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn4 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel4 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow5 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "5"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc5 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing5 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop5 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag5 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn5 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel5 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow6 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "6"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc6 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing6 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop6 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag6 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn6 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel6 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow7 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "7"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc7 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing7 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop7 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag7 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn7 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel7 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow8 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "8"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc8 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing8 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop8 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag8 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn8 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel8 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow9 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "9"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc9 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing9 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop9 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag9 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn9 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel9 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow10 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "10"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc10 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing10 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop10 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag10 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn10 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel10 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow11 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "11"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc11 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing11 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop11 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag11 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn11 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel11 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow12 { LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "12"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc12 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing12 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop12 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag12 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn12 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel12 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        // --- Slots 13-24 (hidden by default, shown via Add) ---
+        Group #LootRow13 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "13"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc13 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing13 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop13 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag13 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn13 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel13 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow14 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "14"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc14 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing14 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop14 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag14 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn14 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel14 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow15 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "15"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc15 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing15 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop15 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag15 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn15 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel15 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow16 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "16"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc16 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing16 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop16 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag16 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn16 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel16 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow17 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "17"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc17 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing17 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop17 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag17 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn17 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel17 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow18 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "18"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc18 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing18 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop18 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag18 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn18 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel18 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow19 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "19"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc19 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing19 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop19 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag19 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn19 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel19 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow20 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "20"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc20 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing20 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop20 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag20 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn20 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel20 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow21 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "21"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc21 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing21 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop21 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag21 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn21 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel21 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow22 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "22"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc22 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing22 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop22 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag22 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn22 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel22 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow23 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "23"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc23 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing23 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop23 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag23 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn23 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel23 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+        Group #LootRow24 { Visible: false; LayoutMode: Left; Anchor: (Height: 36, Bottom: 2);
+          Label { Text: "24"; Anchor: (Width: 16); Style: (FontSize: 11, TextColor: #6e7da1, VerticalAlignment: Center); }
+          $C.@DropdownBox #LootNpc24 { Anchor: (Width: 180, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@DropdownBox #LootRing24 { Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Left: 4); }
+          $C.@NumberField #LootDrop24 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 5.0; }
+          $C.@NumberField #LootFrag24 { @Anchor = (Width: 60, Left: 4); Format: (MaxDecimalPlaces: 2, Step: 0.1, MinValue: 0, MaxValue: 100); Value: 70.0; }
+          $C.@SecondaryTextButton #LootSpawn24 { @Text = "x10"; Anchor: (Width: 50, Height: 28, Left: 4); }
+          $C.@SecondaryTextButton #LootDel24 { @Text = "X"; Anchor: (Width: 28, Height: 28, Left: 2); }
+        }
+
+        // Add button
+        Group { LayoutMode: Left; Anchor: (Height: 40, Top: 6);
+          $C.@SecondaryTextButton #LootAdd { @Text = "+ Add NPC"; Anchor: (Width: 120, Height: 32); }
+        }
+      }
+
+      // ========== CLOSE BUTTON ==========
+      Group {
+        Anchor: (Height: 50);
+        LayoutMode: Middle;
+
+        $C.@SecondaryTextButton #CloseButton {
+          @Text = "Close";
+          Anchor: (Width: 140, Height: 44);
+        }
+      }
+    }
+  }
+}

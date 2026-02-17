@@ -1,0 +1,201 @@
+{
+    "DisplayNameKey": "server.barter.tiffy_merchant.title",
+    "RefreshInterval": {
+        "Days": 1
+    },
+    "RestockHour": 6,
+    "TradeSlots": [
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Jewelry_Fly_Ring",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Stud_Iron",
+                        "Quantity": 125
+                    }
+                ],
+                "Stock": 5
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Jewelry_Fire_Ring",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Stud_Iron",
+                        "Quantity": 125
+                    }
+                ],
+                "Stock": 5
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Jewelry_Water_Ring",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Stud_Iron",
+                        "Quantity": 125
+                    }
+                ],
+                "Stock": 5
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Jewelry_Heal_Ring",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Stud_Iron",
+                        "Quantity": 125
+                    }
+                ],
+                "Stock": 5
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Jewelry_Peacefull_Ring",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Stud_Iron",
+                        "Quantity": 125
+                    }
+                ],
+                "Stock": 5
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Ring_Altar_Dark",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Void_Essence",
+                        "Quantity": 85
+                    }
+                ],
+                "Stock": 20
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Ring_Altar_Light",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Ingredient_Life_Essence",
+                        "Quantity": 85
+                    }
+                ],
+                "Stock": 20
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Loot_Fox_Free",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Scroll_DeWateil",
+                        "Quantity": 5
+                    }
+                ],
+                "Stock": 99
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Loot_Fox_Summon",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Scroll_DeWateil",
+                        "Quantity": 25
+                    }
+                ],
+                "Stock": 99
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Loot_Cow_Summon",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Scroll_DeWateil",
+                        "Quantity": 25
+                    }
+                ],
+                "Stock": 99
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Loot_Sheep_Summon",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Scroll_DeWateil",
+                        "Quantity": 25
+                    }
+                ],
+                "Stock": 99
+            }
+        },
+        {
+            "Type": "Fixed",
+            "Trade": {
+                "Output": {
+                    "ItemId": "Loot_Hound_Summon",
+                    "Quantity": 1
+                },
+                "Input": [
+                    {
+                        "ItemId": "Scroll_DeWateil",
+                        "Quantity": 25
+                    }
+                ],
+                "Stock": 99
+            }
+        }
+    ]
+}
